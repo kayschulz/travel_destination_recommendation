@@ -79,3 +79,15 @@ def get_wiki_description(browser, city, wiki_collection):
     wiki_collection.insert_one(wiki_dict)
 
 
+def replace_df_text(browser, city, df):
+    url = 'https://en.wikipedia.org/wiki/' + city[1].replace(' ', '_')
+    browser.get(url)
+    summary = ''
+    for i in range(1, 100):
+        paragraphs = '//*[@id="mw-content-text"]/div/p['+ str(i) + ']'
+        try:
+            summary += browser.find_element_by_xpath(paragraphs).text
+            summary += '\n'
+        except:
+            None
+    df.loc[df['city'] == city[0], 'text'] = summary
