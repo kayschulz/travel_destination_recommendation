@@ -55,4 +55,27 @@ def collect_city_data(browser, city_url, country, city_collection):
         print(f'Inserted {city}, {country} into city collection')
     except:
         None
+        
+        
+def get_wiki_description(browser, city, wiki_collection):
+    """
+    Get the wikipedia text entry of the city.
+    If the city is not in wikipedia, it will raise an alert
+    """
+    url = 'https://en.wikipedia.org/wiki/' + city.replace(' ', '_')
+    try:
+        browser.get(url)
+    except:
+        print(f'{city} NOT found on Wikipedia')
+    summary = ''
+    for i in range(1, 100):
+        paragraphs = '//*[@id="mw-content-text"]/div/p['+ str(i) + ']'
+        try:
+            summary += browser.find_element_by_xpath(paragraphs).text
+            summary += '\n'
+        except:
+            None
+    wiki_dict = {'city': city, 'text': summary}
+    wiki_collection.insert_one(wiki_dict)
+
 
