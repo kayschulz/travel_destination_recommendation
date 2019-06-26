@@ -696,7 +696,12 @@ def preprocess(text):
         "nuremberg",
         "uk",
         "britain",
-        "cornish"
+        "cornish",
+        "louis",
+        "include",
+        "includes",
+        "central",
+        "center"
     ]
     for token in simple_preprocess(text):
         if token not in stopwords:
