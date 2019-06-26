@@ -707,3 +707,24 @@ def preprocess(text):
         if token not in stopwords:
             result.append(lemmatize_and_stem(token))
     return result
+
+
+def get_aggregate_score(lda_model, bow_corpus, i=0):
+    """
+    Get the combined aggregate score for topics using rick_steves and wikipedia
+    """
+    rick_steves = lda_model[bow_corpus[i]]
+    wikipedia = lda_model[bow_corpus[i+213]]
+    if len(wikipedia) != 5:
+        indices = []
+        for item in wikipedia:
+            indices.append(item[0])
+        for index in list(range(5)):
+            if index not in indices:
+                wikipedia.append((index, 0))
+    aggregate = {}
+    for index, score in rick_steves:
+        rs_score = score
+        wiki_score = wikipedia[index][1]
+        aggregate[index] = np.mean([score, wiki_score])
+    return aggregate
