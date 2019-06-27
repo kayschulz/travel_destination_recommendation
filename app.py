@@ -17,4 +17,4 @@ def index():
 # collect initial user input ratings
 # show 10 potential destinations and rating directions
 # collect destination ratings
-# show the top 5 recommended destinations
+# show the top 5 recommended destinations with picture, description and link

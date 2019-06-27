@@ -16,6 +16,7 @@ def get_initial_user_score():
 
     topics = ['a forest/mountain setting', 'visiting palaces/castles',
               'a costal/water setting', 'historical sites', 'an urban setting']
+    
     user_scores = [float(input(f"How important is {topic}: ")) / 10
                    for topic in topics]
     print('\n')
@@ -39,10 +40,10 @@ def recommend_nn(nn_model, cities, user_scores):
     return list(zip(destinations, distances))
 
 
-def get_random_recs(closest_50, n=10):
+def get_random_recs(closest, n=10):
     """Generates n random recommendations from
        top 50 recommended destinations"""
-    return np.random.choice(np.array(closest_50)[:, 0], n, replace=False)
+    return np.random.choice(np.array(closest)[:, 0], n, replace=False)
 
 
 def get_city_scores(cities_df, city):
@@ -135,19 +136,25 @@ def get_user_city_ratings(nn_model, cities, user_score,
     return closest
 
 
-def make_recommendations(cities_df, nn_model, ignore_cities=[],
-                         visited_cities=[],
-                         city_ratings=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]):
+def make_recommendations(cities_df, nn_model, ignore_cities=None,
+                         visited_cities=None, city_ratings=None):
     """
     Finds the five most recommended cities determined by user
     input and previously visited cities
     """
+    if ignore_cities is None:
+        ignore_cities = []
+    if visited_cities is None:
+        visited_cities = []
+    if city_ratings is None:
+        city_ratings = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        
     user_score = get_initial_user_score()
     print('''For the following locations give:
             \t1 if you have visited and liked
             \t-1 if you have visited and disliked
             \t0 if you have never been''')
-    closest_50 = get_user_city_ratings(nn_model, cities_df,
+    closest = get_user_city_ratings(nn_model, cities_df,
                                        user_score, city_ratings,
                                        ignore_cities, visited_cities)
-    return closest_50[0:5]
+    return closest[0:5]
