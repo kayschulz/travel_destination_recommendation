@@ -4,7 +4,10 @@ import pandas as pd
 import numpy as np
 import pymongo
 
-mc = pymongo.MongoClient()
+with open('.secrets/password.txt', 'r') as f:
+    conn_string = f.read().strip()
+    
+mc = pymongo.MongoClient(conn_string)
 city_db = mc['city_database']
 user_coll = city_db['user_collection']
 
