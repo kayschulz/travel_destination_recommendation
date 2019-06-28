@@ -10,6 +10,7 @@ with open('.secrets/password.txt', 'r') as f:
 mc = pymongo.MongoClient(conn_string)
 city_db = mc['city_database']
 user_coll = city_db['user_collection']
+user_satisfaction = city_db['user_satistaction']
 
 
 def get_initial_user_score():
@@ -122,7 +123,7 @@ def get_user_city_ratings(nn_model, cities, user_score,
     while sum([abs(rating) for rating in city_ratings]) > 5:
         random_recs = get_random_recs(closest)
         for i, rec in enumerate(random_recs):
-            if rec not in ignore:
+            if str(rec) not in ignore:
                 rating = int(input(f"Rate {random_recs[i]}: "))
                 city_ratings[i] = rating
                 user_dict[str(rec)] = rating
@@ -161,3 +162,12 @@ def make_recommendations(cities_df, nn_model, ignore_cities=None,
                                        user_score, city_ratings,
                                        ignore_cities, visited_cities)
     return closest[0:5]
+
+
+def rate_recs(recommendations):
+    interest = []
+    print('If interested enter 1, else 0')
+    for rec in recommendations:
+        interest.append(int(input(str(rec[0]) + ': ')))
+    satisfaction = {'satisfaction_score': sum(interest) / 5}
+    user_satisfaction.insert_one(satisfaction)
