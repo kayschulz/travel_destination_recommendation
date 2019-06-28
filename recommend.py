@@ -5,9 +5,9 @@ import numpy as np
 import pymongo
 
 with open('.secrets/password.txt', 'r') as f:
-    password = f.read().strip()
+    conn_string = f.read().strip()
     
-mc = pymongo.MongoClient(password)
+mc = pymongo.MongoClient(conn_string)
 city_db = mc['city_database']
 user_coll = city_db['user_collection']
 
