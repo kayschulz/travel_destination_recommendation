@@ -93,3 +93,31 @@ def replace_df_text(browser, city, df):
         except:
             None
     df.loc[df['city'] == city[0], 'text'] = summary
+    
+    
+
+def get_city_photos(browser, city_df, country_url):
+    """
+    doc string
+    """
+    browser.get(country_url)
+    country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+    country = browser.find_element_by_xpath(country_path).text
+    
+    city_path = '/europe/' + country.lower() + '/'
+    city_urls = collect_urls(browser, city_path)
+    for city_url in city_urls:
+        browser.get(city_url)
+        time.sleep(np.random.randint(10, 30))
+        try:
+            city_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+            city = browser.find_element_by_xpath(city_path).text
+            image = browser.find_element_by_xpath('//*[@id="slideshow1_s0"]/figure/img')
+            img_url = image.get_attribute('src')
+            filename = 'images/' + city.lower() + '.jpg'
+            urllib.request.urlretrieve(str(img_url), filename=str(filename))
+            city_df.loc[city_df['city'] == city, 'url'] = city_url
+            city_df.loc[city_df['city'] == city, 'image'] = image_url            
+        except:
+            continue
+        
