@@ -3,7 +3,7 @@ import random
 import pandas as pd
 import json
 import pickle
-from recommend import *
+from recommend import 
 
 nn_model = pickle.load(open('models/nn_model.pkl', 'rb'))
 app = Flask(__name__, static_url_path="")
@@ -13,8 +13,22 @@ def index():
     """Return the main page."""
     return render_template('index.html')
 
-# show same pictures with rating system and collection
-# collect initial user input ratings
-# show 10 potential destinations and rating directions
-# collect destination ratings
-# show the top 5 recommended destinations with picture, description and link
+
+@app.route()
+def score_features():
+    # directions > in the template?
+    # user scores five features 
+    
+    
+@app.route()
+def score_random_cities():
+    # will need directions in the page? > In the template?
+    # shows ten random cities (different function?) with pictures
+    # rating of the cities based on previous experience
+
+@app.route()
+def final_recommendations():
+    # update the user score
+    # show the top 5 recommended
+    # this show should have pictures, short description, and link to ricksteves.com
+    # quick thumbs up down on if you would want to go

@@ -15,11 +15,12 @@ user_satisfaction = city_db['user_satistaction']
 
 def get_initial_user_score():
     """Collect initial user score"""
+    
     print('''Rate on a scale of 0-10.
     0 is not important and 10 is very important''')
 
     topics = ['a forest/mountain setting', 'visiting palaces/castles',
-              'a costal/water setting', 'historical sites', 'an urban setting']
+              'a coastal/water setting', 'historical sites', 'an urban setting']
     
     user_scores = [float(input(f"How important is {topic}: ")) / 10
                    for topic in topics]
@@ -110,7 +111,7 @@ def get_updated_n_recommendation(user_score, cities, random_recs,
 
 
 def get_user_city_ratings(nn_model, cities, user_score,
-                          city_ratings, ignore, visited):
+                          visited):
     """
     Asks user to rate 10 random cities.
     User Input Meanings:
@@ -120,38 +121,30 @@ def get_user_city_ratings(nn_model, cities, user_score,
     """
     closest = recommend_nn(nn_model, cities, user_score)
     user_dict = {}
-    while sum([abs(rating) for rating in city_ratings]) > 5:
-        random_recs = get_random_recs(closest)
-        for i, rec in enumerate(random_recs):
-            if str(rec) not in ignore:
-                rating = int(input(f"Rate {random_recs[i]}: "))
-                city_ratings[i] = rating
-                user_dict[str(rec)] = rating
-                if rating != 0:
-                    visited.append(rec)
-        ignore.extend(random_recs)
-        print('\n')
-        # new closest
-        closest = get_updated_n_recommendation(user_score, cities,
-                                               random_recs, nn_model,
-                                               city_ratings, visited)
+    random_recs = get_random_recs(closest)
+    city_ratings = []
+    for i, rec in enumerate(random_recs):
+        rating = int(input(f"Rate {random_recs[i]}: "))
+        city_ratings.append(rating)
+        user_dict[str(rec)] = rating
+        if rating != 0:
+            visited.append(rec)
+    # new closest
+    closest = get_updated_n_recommendation(user_score, cities,
+                                           random_recs, nn_model,
+                                           city_ratings, visited)
 
     user_coll.insert_one(user_dict)
     return closest
 
 
-def make_recommendations(cities_df, nn_model, ignore_cities=None,
-                         visited_cities=None, city_ratings=None):
+def make_recommendations(cities_df, nn_model, visited_cities=None):
     """
     Finds the five most recommended cities determined by user
     input and previously visited cities
     """
-    if ignore_cities is None:
-        ignore_cities = []
     if visited_cities is None:
         visited_cities = []
-    if city_ratings is None:
-        city_ratings = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         
     user_score = get_initial_user_score()
     print('''For the following locations give:
@@ -159,8 +152,7 @@ def make_recommendations(cities_df, nn_model, ignore_cities=None,
             \t-1 if you have visited and disliked
             \t0 if you have never been''')
     closest = get_user_city_ratings(nn_model, cities_df,
-                                       user_score, city_ratings,
-                                       ignore_cities, visited_cities)
+                                    user_score, visited_cities)
     return closest[0:5]
 
 
