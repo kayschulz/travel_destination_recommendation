@@ -17,15 +17,22 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     data = request.json
-    print(data)
     
+    forest_text = data['user_input_forest']
+    forest_score = float(forest_text) / 10
     
-
-#     prediction = model.predict_proba([data['user_input']])
-#     return jsonify({'probability': prediction[0][1]})
-
-    # directions > in the template?
-    # user scores five features 
+    castle_text = data['user_input_castle']
+    castle_score = float(castle_text) / 10  
+    
+    water_text = data['user_input_water']
+    water_score = float(water_text) / 10  
+    
+    historical_text = data['user_input_historical']
+    historical_score = float(historical_text) / 10  
+    
+    urban_text = data['user_input_urban']
+    urban_score = float(urban_text) / 10 
+    return np.array([urban_score])
     
     
 # @app.route()
@@ -45,9 +52,7 @@ def predict():
 #     data = request.json
 #     print(data)
     
-#     hour_24_text = data['user_input_hour']
-#     print(hour_24_text, type(hour_24_text))
-#     hour_24 = int(hour_24_text)
+
     
 #     weekday_str = data['user_input_weekday']
 #     weekday_int = day_str_to_int(weekday_str)
