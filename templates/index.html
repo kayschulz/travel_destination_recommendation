@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-  <script type="text/javascript" src="brython.js"></script>
-  <script type="text/javascript" src="brython_stdlib.js"></script>
-
-  <title>Take Me to Europe</title>
-
-</head>
-
-<body onload="brython(1)">
+<html>
+  <head>
+    <title>Travel Recommendation</title>
+    <script type="text/javascript" src="brython.js"></script>
+    <script type="text/javascript" src="brython_stdlib.js"></script>
+    <link rel="icon" href="data:;base64,=">
+  </head>
+  <body onload="brython(1)">
     <script type="text/python3">
       from browser import document, ajax
       import json
@@ -20,12 +15,13 @@
               document["result"].html = response.text
           else:
               warnings.warn(response.text)
-      def get_user_score(ev):
+              
+      def get_prediction(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
           req.bind('complete', show_results)
-          req.open('POST', '/user_score', True)
-          req.set_header('content-type','application/json')          
+          req.open('POST', '/predict', True)
+          req.set_header('content-type','application/json')
           user_inputs = {
               'user_input_forest': document['user_input_forest'].value),
               'user_input_castle': document['user_input_castle'].value),
@@ -35,72 +31,48 @@
             }
           data = json.dumps(user_inputs)
           req.send(data)
-      document["initial_score_button"].bind("click", get_user_score)
+      document["predict_button"].bind("click", get_prediction)
     </script>
     
-    
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-      <h2 class="navbar-brand">European Travel Recommendation</h2>
+    <h1>Rate importance on a scale of 0 to 10</h1>  
+    <div>Forest/Mountain</div>
+    <textarea id="user_input_forest"></textarea>
+    <div>Palaces/Castles</div>
+    <textarea id="user_input_castle"></textarea>
+    <div>Coastal/Water</div>
+    <textarea id="user_input_water"></textarea>
+    <div>Historical</div>
+    <textarea id="user_input_historical"></textarea>
+    <div>Urban</div>
+    <textarea id="user_input_urban"></textarea>
+    <button id="initial_score_button">Next</button>
+    <div id="result"></div>
 
-  <!-- Page Header -->
-  <header class="masthead">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>Rate importance on a scale of 0 to 10</h1>
-            <div>Forest/Mountain</div>
-            <textarea id="user_input_forest"></textarea>
-            <div>Palaces/Castles</div>
-            <textarea id="user_input_castle"></textarea>
-            <div>Coastal/Water</div>
-            <textarea id="user_input_water"></textarea>
-            <div>Historical</div>
-            <textarea id="user_input_historical"></textarea>
-            <div>Urban</div>
-            <textarea id="user_input_urban"></textarea>
-            <button id="initial_score_button">Next</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+
         
-  <header class="masthead2">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h1>
-            <div>place 1</div>
-            <textarea id="place_1_rating"></textarea>
-            <div>place 2</div>
-            <textarea id="place_2_rating"></textarea>
-            <div>place 3</div>
-            <textarea id="place_3_rating"></textarea>
-            <div>place 4</div>
-            <textarea id="place_4_rating"></textarea>
-            <div>place 5</div>
-            <textarea id="place_5_rating"></textarea>
-            <div>place 6</div>
-            <textarea id="place_6_rating"></textarea>
-            <div>place 7</div>
-            <textarea id="place_7_rating"></textarea>
-            <div>place 8</div>
-            <textarea id="place_8_rating"></textarea>
-            <div>place 9</div>
-            <textarea id="place_9_rating"></textarea>
-            <div>place 10</div>
-            <textarea id="place_10_rating"></textarea>
-            <button id="city_rating_button">Find Top 5 Destinations</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-        
+    <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h1>
+    <div>place 1</div>
+    <textarea id="place_1_rating"></textarea>
+    <div>place 2</div>
+    <textarea id="place_2_rating"></textarea>
+    <div>place 3</div>
+    <textarea id="place_3_rating"></textarea>
+    <div>place 4</div>
+    <textarea id="place_4_rating"></textarea>
+    <div>place 5</div>
+    <textarea id="place_5_rating"></textarea>
+    <div>place 6</div>
+    <textarea id="place_6_rating"></textarea>
+    <div>place 7</div>
+    <textarea id="place_7_rating"></textarea>
+    <div>place 8</div>
+    <textarea id="place_8_rating"></textarea>
+    <div>place 9</div>
+    <textarea id="place_9_rating"></textarea>
+    <div>place 10</div>
+    <textarea id="place_10_rating"></textarea>
+    <button id="city_rating_button">Find Top 5 Destinations</button>
+      
+  </body>
 </html>
+        
