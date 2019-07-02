@@ -1,0 +1,1 @@
+Contains images of locations for Flask App deployment
