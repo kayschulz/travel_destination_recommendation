@@ -3,7 +3,7 @@
     <title>Travel Recommendation</title>
     <script type="text/javascript" src="brython.js"></script>
     <script type="text/javascript" src="brython_stdlib.js"></script>
-    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+  <link rel="icon" href="data:;base64,=">
   </head>
   <body onload="brython(1)">
     <script type="text/python3">
@@ -15,25 +15,27 @@
               document["result"].html = response.text
           else:
               warnings.warn(response.text)
-              
       def get_prediction(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
           req.bind('complete', show_results)
-          req.open('POST', '/predict', True)
+          req.open('POST', '/predict', False)
           req.set_header('content-type','application/json')
           user_inputs = {
-              'user_input_forest': document['user_input_forest'].value),
-              'user_input_castle': document['user_input_castle'].value),
-              'user_input_water': document['user_input_water'].value),
-              'user_input_historical': document['user_input_historical'].value),
-              'user_input_urban': document['user_input_urban'].value)
+              'user_input_forest': document['user_input_forest'].value,
+              'user_input_castle': document['user_input_castle'].value,
+              'user_input_water': document['user_input_water'].value,
+              'user_input_historical': document['user_input_historical'].value,
+              'user_input_urban': document['user_input_urban'].value
             }
           data = json.dumps(user_inputs)
           req.send(data)
-      document["predict_button"].bind("click", get_prediction)
+          return user_inputs
+      def showtext(ev):
+         display = document["place_1_rating"].style.display
+         document["place_1_rating"].style.display = "inline"
+      document["predict_button"].bind("click", showtext)
     </script>
-    
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
     <textarea id="user_input_forest"></textarea>
@@ -45,13 +47,16 @@
     <textarea id="user_input_historical"></textarea>
     <div>Urban</div>
     <textarea id="user_input_urban"></textarea>
-    <button id="predict_button">Next</button>
+    <button id="predict_button">Predict!</button>
     <div id="result"></div>
+      
+    
+    
        
-<!--     <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h1>
-    <div>place 1</div>
-    <textarea id="place_1_rating"></textarea>
-    <div>place 2</div>
+<!--     <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h1> -->
+<!--     <div id=place_1>place 1</div> -->
+    <textarea id="place_1_rating" style="display:none"></textarea>
+<!--     <div>place 2</div>
     <textarea id="place_2_rating"></textarea>
     <div>place 3</div>
     <textarea id="place_3_rating"></textarea>
@@ -70,7 +75,5 @@
     <div>place 10</div>
     <textarea id="place_10_rating"></textarea>
     <button id="city_rating_button">Find Top 5 Destinations</button> -->
-      
   </body>
 </html>
-        

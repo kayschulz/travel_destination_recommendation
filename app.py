@@ -17,8 +17,15 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     data = request.json
-    print(data)
-    return jsonify(data)    
+    stored = store_data(data)
+    print(stored)
+    return jsonify(data)
+    #return new questions here
+
+
+def store_data(data):
+    scores = data.values()
+    scores_as_float = [float(score) / 10 for score in scores]
 #     forest_text = data['user_input_forest']
 #     forest_score = float(forest_text) / 10
     
@@ -34,7 +41,7 @@ def predict():
 #     urban_text = data['user_input_urban']
 #     urban_score = float(urban_text) / 10 
     
-#     return jsonify({'score': str(urban_score)})
+    return scores_as_float
 
 
 #jsonify(action="populate",)
