@@ -10,8 +10,7 @@
       from browser import document, ajax
       import json
       import warnings
-      list_of_cities = ["this", "is", "a", "t", "f", "s", "seven", "e", "n", "t"]
-
+ 
       def show_results(response):
           if response.status==200 or response.status==0:
               document["result"].html = response.text
@@ -35,11 +34,11 @@
           return user_inputs
       
       def showtext(ev):
-         display = document["random_recs"].style.display
          document["random_recs"].style.display = "inline"
       
-
-      def change_place_names(ev, list_of_cities=list_of_cities):
+      document["score_button"].bind("click", get_prediction)
+      
+      def change_place_names(ev, list_of_cities=['1','2','3','4','5','6','7','8','9','0']):
           document["place_1"].textContent = list_of_cities[0]
           document["place_2"].textContent = list_of_cities[1]
           document["place_3"].textContent = list_of_cities[2]
@@ -51,8 +50,7 @@
           document["place_9"].textContent = list_of_cities[8]
           document["place_10"].textContent = list_of_cities[9]
       
-      
-      document["score_button"].bind("click", change_place_names, showtext, get_prediction)
+      document["rate_more_button"].bind("click", change_place_names, showtext)
     </script>
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
