@@ -3,9 +3,11 @@ import random
 import pandas as pd
 import json
 import pickle
-from recommend import *
+import numpy as np
+from recommend import recommend_nn, get_random_recs
 
 nn_model = pickle.load(open('models/nn_model.pkl', 'rb'))
+cities = pickle.load(open('data/cities_with_topic_scores.pkl', 'rb'))
 app = Flask(__name__, static_url_path="")
     
 @app.route('/')
@@ -14,34 +16,23 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/predict', methods=['GET', 'POST'])
-def predict():
+@app.route('/scores', methods=['GET', 'POST'])
+def score():
     data = request.json
-    stored = store_data(data)
-    print(stored)
-    return jsonify(data)
+    user_scores = store_data(data)
+    
+    closest_50 = recommend_nn(nn_model, cities, user_scores)
+    random_cities = get_random_recs(closest_50)
+    print(random_cities)
+    
+    return ''
     #return new questions here
 
 
 def store_data(data):
     scores = data.values()
     scores_as_float = [float(score) / 10 for score in scores]
-#     forest_text = data['user_input_forest']
-#     forest_score = float(forest_text) / 10
-    
-#     castle_text = data['user_input_castle']
-#     castle_score = float(castle_text) / 10  
-    
-#     water_text = data['user_input_water']
-#     water_score = float(water_text) / 10  
-    
-#     historical_text = data['user_input_historical']
-#     historical_score = float(historical_text) / 10  
-    
-#     urban_text = data['user_input_urban']
-#     urban_score = float(urban_text) / 10 
-    
-    return scores_as_float
+    return np.array(scores_as_float).reshape(1, -1)
 
 
 #jsonify(action="populate",)
