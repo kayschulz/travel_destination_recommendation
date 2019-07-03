@@ -10,7 +10,7 @@ from recommend import recommend_nn, get_random_recs, get_updated_n_recommendatio
 nn_model = pickle.load(open('models/nn_model.pkl', 'rb'))
 cities = pickle.load(open('data/cities_with_topic_scores.pkl', 'rb'))
 app = Flask(__name__, static_url_path="")
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_TYPE'] = 'mongodb'
 Session(app)
     
 @app.route('/')
