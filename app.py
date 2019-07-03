@@ -10,8 +10,8 @@ from recommend import recommend_nn, get_random_recs
 nn_model = pickle.load(open('models/nn_model.pkl', 'rb'))
 cities = pickle.load(open('data/cities_with_topic_scores.pkl', 'rb'))
 app = Flask(__name__, static_url_path="")
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
+# app.config['SESSION_TYPE'] = 'filesystem'
+# Session(app)
     
 @app.route('/')
 def index():
@@ -26,15 +26,12 @@ def score():
     
     closest_50 = recommend_nn(nn_model, cities, user_scores)
     random_cities = get_random_recs(closest_50)
-    print(random_cities)
     numbers = list(range(10))
     random_cities_dict = dict(zip(numbers, random_cities))
+#     session['random_cities'] = random_cities
+#     test = session.get('random_cities')
     print(random_cities_dict)
-    session['random_cities'] = random_cities
-    test = session.get('random_cities')
-    print(test)
     return jsonify(random_cities_dict)
-    #return new questions here
 
 
 def store_data(data):

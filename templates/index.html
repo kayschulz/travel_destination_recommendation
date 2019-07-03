@@ -13,12 +13,11 @@
  
       def show_results(response):
           if response.status==200 or response.status==0:
-              document["result"].html = response.text
               cities = json.loads(response.text)
               change_place_names(cities)
           else:
               warnings.warn(response.text)
-      def get_prediction(ev):
+      def get_user_scores(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
           req.bind('complete', show_results)
@@ -34,16 +33,17 @@
           data = json.dumps(user_inputs)
           req.send(data)
       
-      def showtext(ev):
-         document["random_recs"].style.display = "inline"
-      
-      document["score_button"].bind("click", get_prediction)
-      
       def change_place_names(cities):
           for k, v in cities.items():
-              document[f"place_{int(k)+1}"].textContent = repr(v)
+              place = repr(v)
+              place = place.replace("'", "").replace("[", "").replace("]", "")
+              document[f"place_{int(k)+1}"].textContent = place
+              
+      def show_random_places(ev):
+         document["random_recs"].style.display = "inline"
       
-      document["rate_more_button"].bind("click", change_place_names, showtext)
+      document["score_button"].bind("click", get_user_scores, show_random_places)
+      
     </script>
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
@@ -57,11 +57,8 @@
     <div>Urban</div>
     <textarea id="user_input_urban"></textarea>
     <button id="score_button">Submit</button>
-    <button id="rate_more_button">Rate More</button>
-    <div id="result"></div>
       
-    
-    
+     
     <div id="random_recs" style="display:none">   
         <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h2>
         <div id=place_1>place 1</div>
