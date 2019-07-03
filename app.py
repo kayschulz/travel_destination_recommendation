@@ -53,20 +53,16 @@ def store_ratings(data):
 def recommend():
     data = request.json
     user_ratings = store_ratings(data)
-    print(user_ratings)
     user_score = session.get('user_scores')
-    print(user_score)
     random_recs = session.get('random_cities')
-    print(random_recs)
     visited = []
     for ind, rating in enumerate(user_ratings):
         if rating != 0:
             visited.append(random_recs[ind])
-    print(visited)
     closest = get_updated_n_recommendation(user_score, cities, random_recs,
                                   nn_model, user_ratings, visited)
     recommendations = {}
     for i, place in enumerate(closest[:5]):
-        recommendations[i] = place
+        recommendations[i] = place[0]
     return jsonify(recommendations)
     

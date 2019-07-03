@@ -42,19 +42,20 @@
       def show_random_places(ev):
          document["random_recs"].style.display = "inline"
       
+      def show_recommendations(ev):
+         document["final_recs"].style.display = "inline"
       
-      def show_recs(response):
+      def get_recs(response):
           if response.status==200 or response.status==0:
               recommendations = json.loads(response.text)
-              
-              document["result"].html = something_
+              clean_recommendations(recommendations)
               
           else:
               warnings.warn(response.text)
       def get_recommendations(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
-          req.bind('complete', show_recs)
+          req.bind('complete', get_recs)
           req.open('POST', '/recommend', True)
           req.set_header('content-type','application/json')
           user_inputs = {
@@ -72,16 +73,15 @@
           data = json.dumps(user_inputs)
           req.send(data)
       
-      # TODO - fix
       def clean_recommendations(recommendations):
-          places = []
-          for k, v in cities.items():
+          for k, v in recommendations.items():
               place = repr(v)
-              places.append(place.replace("'", "").replace("[", "").replace("]", ""))
-          
+              place = place.replace("'", "").replace("[", "").replace("]", "")
+              document[f"rec_{int(k)+1}"].textContent = place
+
               
       document["score_button"].bind("click", get_user_scores, show_random_places)
-      document["city_rating_button"].bind("click", get_recommendations)
+      document["city_rating_button"].bind("click", get_recommendations, show_recommendations)
 
      
     </script>
@@ -123,6 +123,20 @@
         <textarea id="place_10_rating"></textarea>
         <button id="city_rating_button">Find Top 5 Destinations</button>
      </div>
-     <div id="result"></div>
+     
+      
+     <div id="final_recs" style="display:none">   
+        <h2>Your recommendations</h2>
+        <div id=rec_1>rec 1</div>
+        <textarea id="rec_1_interest"></textarea>
+        <div id=rec_2>rec 2</div>
+        <textarea id="rec_2_interest"></textarea>
+        <div id=rec_3>rec 3</div>
+        <textarea id="rec_3_interest"></textarea>
+        <div id=rec_4>rec 4</div>
+        <textarea id="rec_4_interest"></textarea>
+        <div id=rec_5>rec 5</div>
+        <textarea id="rec_5_interest"></textarea>
+     </div>
   </body>
 </html>

@@ -11,7 +11,7 @@ with open('.secrets/password.txt', 'r') as f:
 mc = pymongo.MongoClient(conn_string)
 city_db = mc['city_database']
 user_coll = city_db['user_collection']
-user_satisfaction = city_db['user_satistaction']
+user_satisfaction = city_db['user_satisfaction']
 
 
 def get_initial_user_score():
