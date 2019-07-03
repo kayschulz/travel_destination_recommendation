@@ -11,7 +11,7 @@
       import json
       import warnings
  
-      def show_results(response):
+      def get_random_cities(response):
           if response.status==200 or response.status==0:
               cities = json.loads(response.text)
               change_place_names(cities)
@@ -20,7 +20,7 @@
       def get_user_scores(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
-          req.bind('complete', show_results)
+          req.bind('complete', get_random_cities)
           req.open('POST', '/scores', False)
           req.set_header('content-type','application/json')
           user_inputs = {
@@ -42,8 +42,32 @@
       def show_random_places(ev):
          document["random_recs"].style.display = "inline"
       
-      document["score_button"].bind("click", get_user_scores, show_random_places)
       
+      def show_recs(response):
+          if response.status==200 or response.status==0:
+              document["result"].html = response.text
+          else:
+              warnings.warn(response.text)
+      def get_recommendations(ev):
+          """Get the predicted probability."""
+          req = ajax.ajax()
+          req.bind('complete', show_recs)
+          req.open('POST', '/recommend', True)
+          req.set_header('content-type','application/json')
+          user_inputs = {
+              'user_input_forest': document['user_input_forest'].value,
+              'user_input_castle': document['user_input_castle'].value,
+              'user_input_water': document['user_input_water'].value,
+              'user_input_historical': document['user_input_historical'].value,
+              'user_input_urban': document['user_input_urban'].value
+            }
+          data = json.dumps(user_inputs)
+          req.send(data)
+      
+      document["score_button"].bind("click", get_user_scores, show_random_places)
+      document["city_rating_button"].bind("click", get_recommendations)
+
+     
     </script>
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
@@ -83,5 +107,6 @@
         <textarea id="place_10_rating"></textarea>
         <button id="city_rating_button">Find Top 5 Destinations</button>
      </div>
+     <div id="result"></div>
   </body>
 </html>

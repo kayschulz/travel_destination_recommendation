@@ -5,13 +5,13 @@ import pandas as pd
 import json
 import pickle
 import numpy as np
-from recommend import recommend_nn, get_random_recs
+from recommend import recommend_nn, get_random_recs, get_updated_n_recommendation
 
 nn_model = pickle.load(open('models/nn_model.pkl', 'rb'))
 cities = pickle.load(open('data/cities_with_topic_scores.pkl', 'rb'))
 app = Flask(__name__, static_url_path="")
-# app.config['SESSION_TYPE'] = 'filesystem'
-# Session(app)
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
     
 @app.route('/')
 def index():
@@ -26,10 +26,10 @@ def score():
     
     closest_50 = recommend_nn(nn_model, cities, user_scores)
     random_cities = get_random_recs(closest_50)
+    session['random_cities'] = random_cities
     numbers = list(range(10))
     random_cities_dict = dict(zip(numbers, random_cities))
-#     session['random_cities'] = random_cities
-#     test = session.get('random_cities')
+
     print(random_cities_dict)
     return jsonify(random_cities_dict)
 
@@ -44,18 +44,19 @@ def get_random_cities(var):
     return session['random_cities']
 
 
-#jsonify(action="populate",)
-    
-    
-# @app.route()
-# def score_random_cities():
-#     # will need directions in the page? > In the template?
-#     # shows ten random cities (different function?) with pictures
-#     # rating of the cities based on previous experience
+def store_ratings(data):
+    ratings = data.values()
+    return [float(rating) for rating in ratings]
 
-# @app.route()
-# def final_recommendations():
-#     # update the user score
-#     # show the top 5 recommended
-#     # this show should have pictures, short description, and link to ricksteves.com
-#     # quick thumbs up down on if you would want to go
+@app.route('/recommend', methods=['GET','POST'])
+def recommend():
+    data = request.json
+    user_ratings = store_ratings(data)
+    print(user_ratings)
+    random_recs = session.get('random_cities')
+    print(random_recs)
+    #closest = get_updated_n_recommendation(*user_score, cities, *random_recs,
+#                                  nn_model, user_ratings, *visited_cities)
+    
+    return ''
+    
