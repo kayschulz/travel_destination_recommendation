@@ -733,3 +733,8 @@ def get_aggregate_score(lda_model, bow_corpus, i=0):
         wiki_score = wikipedia[index][1]
         aggregate[index] = np.mean([score, wiki_score])
     return aggregate
+
+
+def replace_periods(string):
+    """Replaces periods with nothing"""
+    return string.replace('.', '')
