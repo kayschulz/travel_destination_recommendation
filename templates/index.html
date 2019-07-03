@@ -45,7 +45,10 @@
       
       def show_recs(response):
           if response.status==200 or response.status==0:
-              document["result"].html = response.text
+              recommendations = json.loads(response.text)
+              
+              document["result"].html = something_
+              
           else:
               warnings.warn(response.text)
       def get_recommendations(ev):
@@ -69,6 +72,14 @@
           data = json.dumps(user_inputs)
           req.send(data)
       
+      # TODO - fix
+      def clean_recommendations(recommendations):
+          places = []
+          for k, v in cities.items():
+              place = repr(v)
+              places.append(place.replace("'", "").replace("[", "").replace("]", ""))
+          
+              
       document["score_button"].bind("click", get_user_scores, show_random_places)
       document["city_rating_button"].bind("click", get_recommendations)
 
