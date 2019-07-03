@@ -14,6 +14,8 @@
       def show_results(response):
           if response.status==200 or response.status==0:
               document["result"].html = response.text
+              cities = json.loads(response.text)
+              change_place_names(cities)
           else:
               warnings.warn(response.text)
       def get_prediction(ev):
@@ -31,24 +33,15 @@
             }
           data = json.dumps(user_inputs)
           req.send(data)
-          return user_inputs
       
       def showtext(ev):
          document["random_recs"].style.display = "inline"
       
       document["score_button"].bind("click", get_prediction)
       
-      def change_place_names(ev, list_of_cities=['1','2','3','4','5','6','7','8','9','0']):
-          document["place_1"].textContent = list_of_cities[0]
-          document["place_2"].textContent = list_of_cities[1]
-          document["place_3"].textContent = list_of_cities[2]
-          document["place_4"].textContent = list_of_cities[3]
-          document["place_5"].textContent = list_of_cities[4]
-          document["place_6"].textContent = list_of_cities[5]
-          document["place_7"].textContent = list_of_cities[6]
-          document["place_8"].textContent = list_of_cities[7]
-          document["place_9"].textContent = list_of_cities[8]
-          document["place_10"].textContent = list_of_cities[9]
+      def change_place_names(cities):
+          for k, v in cities.items():
+              document[f"place_{int(k)+1}"].textContent = repr(v)
       
       document["rate_more_button"].bind("click", change_place_names, showtext)
     </script>

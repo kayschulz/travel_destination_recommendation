@@ -26,10 +26,14 @@ def score():
     
     closest_50 = recommend_nn(nn_model, cities, user_scores)
     random_cities = get_random_recs(closest_50)
+    print(random_cities)
+    numbers = list(range(10))
+    random_cities_dict = dict(zip(numbers, random_cities))
+    print(random_cities_dict)
     session['random_cities'] = random_cities
     test = session.get('random_cities')
     print(test)
-    return ''
+    return jsonify(random_cities_dict)
     #return new questions here
 
 
