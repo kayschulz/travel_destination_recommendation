@@ -23,6 +23,7 @@ def index():
 def score():
     data = request.json
     user_scores = store_data(data)
+    session['user_scores'] = user_scores
     
     closest_50 = recommend_nn(nn_model, cities, user_scores)
     random_cities = get_random_recs(closest_50)
@@ -53,9 +54,11 @@ def recommend():
     data = request.json
     user_ratings = store_ratings(data)
     print(user_ratings)
+    user_scores = session.get('user_scores')
+    print(user_scores)
     random_recs = session.get('random_cities')
     print(random_recs)
-    #closest = get_updated_n_recommendation(*user_score, cities, *random_recs,
+    #closest = get_updated_n_recommendation(user_score, cities, random_recs,
 #                                  nn_model, user_ratings, *visited_cities)
     
     return ''

@@ -55,11 +55,16 @@
           req.open('POST', '/recommend', True)
           req.set_header('content-type','application/json')
           user_inputs = {
-              'user_input_forest': document['user_input_forest'].value,
-              'user_input_castle': document['user_input_castle'].value,
-              'user_input_water': document['user_input_water'].value,
-              'user_input_historical': document['user_input_historical'].value,
-              'user_input_urban': document['user_input_urban'].value
+              'user_input_place_1': document['place_1_rating'].value,
+              'user_input_place_2': document['place_2_rating'].value,
+              'user_input_place_3': document['place_3_rating'].value,
+              'user_input_place_4': document['place_4_rating'].value,
+              'user_input_place_5': document['place_5_rating'].value,
+              'user_input_place_6': document['place_6_rating'].value,
+              'user_input_place_7': document['place_7_rating'].value,
+              'user_input_place_8': document['place_8_rating'].value,
+              'user_input_place_9': document['place_9_rating'].value,
+              'user_input_place_10': document['place_10_rating'].value
             }
           data = json.dumps(user_inputs)
           req.send(data)
