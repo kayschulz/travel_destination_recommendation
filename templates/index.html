@@ -79,9 +79,32 @@
               place = place.replace("'", "").replace("[", "").replace("]", "")
               document[f"rec_{int(k)+1}"].textContent = place
 
+      def get_sats(response):
+          if response.status==200 or response.status==0:
+              pass   
+          else:
+              warnings.warn(response.text)
+      def get_satisfaction(ev):
+          """Get the predicted probability."""
+          req = ajax.ajax()
+          req.bind('complete', get_sats)
+          req.open('POST', '/rate_recs', True)
+          req.set_header('content-type','application/json')
+          user_inputs = {
+              'rec_1_interest': document['rec_1_interest'].value,
+              'rec_2_interest': document['rec_2_interest'].value,
+              'rec_3_interest': document['rec_3_interest'].value,
+              'rec_4_interest': document['rec_4_interest'].value,
+              'rec_5_interest': document['rec_5_interest'].value
+            }
+          data = json.dumps(user_inputs)
+          req.send(data)
+
+
               
       document["score_button"].bind("click", get_user_scores, show_random_places)
       document["city_rating_button"].bind("click", get_recommendations, show_recommendations)
+      document["satisfaction_button"].bind("click", get_satisfaction)
 
      
     </script>
@@ -126,7 +149,7 @@
      
       
      <div id="final_recs" style="display:none">   
-        <h2>Your recommendations</h2>
+        <h2>Your recommendations: Indicate interest in visiting as 1 and 0 if you are not interested</h2>
         <div id=rec_1>rec 1</div>
         <textarea id="rec_1_interest"></textarea>
         <div id=rec_2>rec 2</div>
@@ -137,6 +160,7 @@
         <textarea id="rec_4_interest"></textarea>
         <div id=rec_5>rec 5</div>
         <textarea id="rec_5_interest"></textarea>
+        <button id="satisfaction_button">My Satisfaction</button>
      </div>
   </body>
 </html>
