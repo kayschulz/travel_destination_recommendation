@@ -105,12 +105,18 @@
       document["score_button"].bind("click", get_user_scores, show_random_places)
       document["city_rating_button"].bind("click", get_recommendations, show_recommendations)
       document["satisfaction_button"].bind("click", get_satisfaction)
+      
+      slider = document.getElementById("forest_range")
+      output.innerHTML = slider.value
 
      
     </script>
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
     <textarea id="user_input_forest"></textarea>
+    <div class="slidecontainer">
+      <input type="range" min="1" max="100" value="50" class="slider" id="forest_range">
+    </div>
     <div>Palaces/Castles</div>
     <textarea id="user_input_castle"></textarea>
     <div>Coastal/Water</div>
