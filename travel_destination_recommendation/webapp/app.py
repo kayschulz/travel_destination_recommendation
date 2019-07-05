@@ -39,7 +39,6 @@ def score():
     """
     data = request.json
     user_scores = store_data(data)
-    print(user_scores)
     
     # store user_score variable   
     session['user_scores'] = user_scores
