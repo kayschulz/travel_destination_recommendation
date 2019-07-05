@@ -36,10 +36,8 @@
       def change_place_names(cities):
           for k, v in cities.items():
               place = repr(v)
-              print(place)
               city_country = place.replace("'", "").replace("[", "").replace("]", "")
               city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
-              print(city)
               document[f"place_{int(k)+1}"].textContent = city_country
               document[f"place_{int(k)+1}_img"].src = f"images/{city}.jpg"
               
@@ -80,8 +78,12 @@
       def clean_recommendations(recommendations):
           for k, v in recommendations.items():
               place = repr(v)
-              place = place.replace("'", "").replace("[", "").replace("]", "")
-              document[f"rec_{int(k)+1}"].textContent = place
+              city_country = place.replace("'", "").replace("[", "").replace("]", "")
+              city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
+              document[f"rec_{int(k)+1}"].textContent = city_country
+              document[f"rec_{int(k)+1}_img"].src = f"images/{city}.jpg"
+
+
 
       def get_sats(response):
           if response.status==200 or response.status==0:
@@ -241,14 +243,29 @@
      <div id="final_recs" style="display:none">   
         <h2>Your recommendations: Indicate interest in visiting as 1 and 0 if you are not interested</h2>
         <div id=rec_1>rec 1</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=rec_1_img>
+        </div>
         <textarea id="rec_1_interest"></textarea>
         <div id=rec_2>rec 2</div>
-        <textarea id="rec_2_interest"></textarea>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=rec_2_img>
+        </div>
+         <textarea id="rec_2_interest"></textarea>
         <div id=rec_3>rec 3</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=rec_3_img>
+        </div>
         <textarea id="rec_3_interest"></textarea>
         <div id=rec_4>rec 4</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=rec_4_img>
+        </div>
         <textarea id="rec_4_interest"></textarea>
         <div id=rec_5>rec 5</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=rec_5_img>
+        </div>
         <textarea id="rec_5_interest"></textarea>
         <button id="satisfaction_button">My Satisfaction</button>
      </div>
