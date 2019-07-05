@@ -24,11 +24,11 @@
           req.open('POST', '/scores', False)
           req.set_header('content-type','application/json')
           user_inputs = {
-              'user_input_forest': document['user_input_forest'].value,
-              'user_input_castle': document['user_input_castle'].value,
-              'user_input_water': document['user_input_water'].value,
-              'user_input_historical': document['user_input_historical'].value,
-              'user_input_urban': document['user_input_urban'].value
+              'user_input_forest': document['forest_slider'].value,
+              'user_input_castle': document['castle_slider'].value,
+              'user_input_water': document['water_slider'].value,
+              'user_input_historical': document['historical_slider'].value,
+              'user_input_urban': document['urban_slider'].value
             }
           data = json.dumps(user_inputs)
           req.send(data)
@@ -98,33 +98,71 @@
               'rec_5_interest': document['rec_5_interest'].value
             }
           data = json.dumps(user_inputs)
+          print(data)
           req.send(data)
-
-
-              
+          
       document["score_button"].bind("click", get_user_scores, show_random_places)
       document["city_rating_button"].bind("click", get_recommendations, show_recommendations)
       document["satisfaction_button"].bind("click", get_satisfaction)
+            
+      def update_forest_slider_label(ev):
+             forest_slide_val = document["forest_slider"].value
+             document["forest_label"].textContent = forest_slide_val
       
-      slider = document.getElementById("forest_range")
-      output.innerHTML = slider.value
+      def update_castle_slider_label(ev):
+             castle_slide_val = document["castle_slider"].value
+             document["castle_label"].textContent = castle_slide_val
+      
+      def update_water_slider_label(ev):
+             water_slide_val = document["water_slider"].value
+             document["water_label"].textContent = water_slide_val
+      
+      def update_historical_slider_label(ev):
+             historical_slide_val = document["historical_slider"].value
+             document["historical_label"].textContent = historical_slide_val
+      
+      def update_urban_slider_label(ev):
+             urban_slide_val = document["urban_slider"].value
+             document["urban_label"].textContent = urban_slide_val
+     
+             
+      document["forest_slider"].bind("change", update_forest_slider_label)
+      document["castle_slider"].bind("change", update_castle_slider_label)
+      document["water_slider"].bind("change", update_water_slider_label)
+      document["historical_slider"].bind("change", update_historical_slider_label)
+      document["urban_slider"].bind("change", update_urban_slider_label)
 
      
     </script>
     <h1>Rate importance on a scale of 0 to 10</h1>  
     <div>Forest/Mountain</div>
-    <textarea id="user_input_forest"></textarea>
+    <div>
+        <img src="images/albi.jpg">
+    </div>
     <div class="slidecontainer">
-      <input type="range" min="1" max="100" value="50" class="slider" id="forest_range">
+        <input type="range" min="0" max="10" step="1" value="5" id="forest_slider" class="slider"/>
+        <span id="forest_label">5</span>
     </div>
     <div>Palaces/Castles</div>
-    <textarea id="user_input_castle"></textarea>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="10" value="5" class="slider" id="castle_slider">
+      <span id="castle_label">5</span>
+    </div>
     <div>Coastal/Water</div>
-    <textarea id="user_input_water"></textarea>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="10" value="5" class="slider" id="water_slider">
+      <span id="water_label">5</span>
+    </div>
     <div>Historical</div>
-    <textarea id="user_input_historical"></textarea>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="10" value="5" class="slider" id="historical_slider">
+      <span id="historical_label">5</span>
+    </div>
     <div>Urban</div>
-    <textarea id="user_input_urban"></textarea>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="10" value="5" class="slider" id="urban_slider">
+      <span id="urban_label">5</span>
+    </div>
     <button id="score_button">Submit</button>
       
      
