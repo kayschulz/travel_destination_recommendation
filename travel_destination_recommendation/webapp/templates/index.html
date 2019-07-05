@@ -39,7 +39,7 @@
               city_country = place.replace("'", "").replace("[", "").replace("]", "")
               city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
               document[f"place_{int(k)+1}"].textContent = city_country
-              document[f"place_{int(k)+1}_img"].src = f"images/{city}.jpg"
+              document[f"place_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
               
       def show_random_places(ev):
          document["random_recs"].style.display = "inline"
@@ -81,7 +81,7 @@
               city_country = place.replace("'", "").replace("[", "").replace("]", "")
               city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
               document[f"rec_{int(k)+1}"].textContent = city_country
-              document[f"rec_{int(k)+1}_img"].src = f"images/{city}.jpg"
+              document[f"rec_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
 
 
 
@@ -239,19 +239,30 @@
         <button id="city_rating_button">Find Top 5 Destinations</button>
      </div>
      
-      
-     <div id="final_recs" style="display:none">   
-        <h2>Your recommendations: Indicate interest in visiting as 1 and 0 if you are not interested</h2>
+           
+      <div id="final_recs" style="display:none"> 
+        <form id=interest_questions>
+        
+        <h2>Here are your recommendations! Let us know if you are interested in the destinations</h2>
         <div id=rec_1>rec 1</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_1_img>
         </div>
-        <textarea id="rec_1_interest"></textarea>
+            
+        <input type="radio" name="choice" value="1"> Interested!
+        <input type="radio" name="choice" value="0"> Not interested
+            
+<!--         <textarea id="rec_1_interest"></textarea>
+ -->
         <div id=rec_2>rec 2</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_2_img>
         </div>
-         <textarea id="rec_2_interest"></textarea>
+        
+        <input type="radio" name="choice" value="1"> Interested!
+        <input type="radio" name="choice" value="0"> Not interested
+        
+<!--         <textarea id="rec_2_interest"></textarea> -->
         <div id=rec_3>rec 3</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_3_img>
@@ -267,7 +278,12 @@
             <img src="images/historical.jpg" width="100" height="80" id=rec_5_img>
         </div>
         <textarea id="rec_5_interest"></textarea>
-        <button id="satisfaction_button">My Satisfaction</button>
+        <button id="satisfaction_button">Thank you!</button>
+        </form> 
      </div>
   </body>
 </html>
+
+
+
+
