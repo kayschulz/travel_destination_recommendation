@@ -36,8 +36,12 @@
       def change_place_names(cities):
           for k, v in cities.items():
               place = repr(v)
-              place = place.replace("'", "").replace("[", "").replace("]", "")
-              document[f"place_{int(k)+1}"].textContent = place
+              print(place)
+              city_country = place.replace("'", "").replace("[", "").replace("]", "")
+              city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
+              print(city)
+              document[f"place_{int(k)+1}"].textContent = city_country
+              document[f"place_{int(k)+1}_img"].src = f"images/{city}.jpg"
               
       def show_random_places(ev):
          document["random_recs"].style.display = "inline"
@@ -181,24 +185,54 @@
     <div id="random_recs" style="display:none">   
         <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h2>
         <div id=place_1>place 1</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_1_img>
+        </div>
         <textarea id="place_1_rating"></textarea>
         <div id=place_2>place 2</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_2_img>
+        </div>
         <textarea id="place_2_rating"></textarea>
         <div id=place_3>place 3</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_3_img>
+        </div>
         <textarea id="place_3_rating"></textarea>
         <div id=place_4>place 4</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_4_img>
+        </div>
         <textarea id="place_4_rating"></textarea>
         <div id=place_5>place 5</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_5_img>
+        </div>
         <textarea id="place_5_rating"></textarea>
         <div id=place_6>place 6</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_6_img>
+        </div>
         <textarea id="place_6_rating"></textarea>
         <div id=place_7>place 7</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_7_img>
+        </div>
         <textarea id="place_7_rating"></textarea>
         <div id=place_8>place 8</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_8_img>
+        </div>
         <textarea id="place_8_rating"></textarea>
         <div id=place_9>place 9</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_9_img>
+        </div>
         <textarea id="place_9_rating"></textarea>
         <div id=place_10>place 10</div>
+        <div>
+            <img src="images/historical.jpg" width="100" height="80" id=place_10_img>
+        </div>
         <textarea id="place_10_rating"></textarea>
         <button id="city_rating_button">Find Top 5 Destinations</button>
      </div>
