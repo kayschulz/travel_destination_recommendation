@@ -97,14 +97,13 @@
           req.open('POST', '/rate_recs', True)
           req.set_header('content-type','application/json')
           user_inputs = {
-              'rec_1_interest': document['rec_1_interest'].value,
-              'rec_2_interest': document['rec_2_interest'].value,
-              'rec_3_interest': document['rec_3_interest'].value,
-              'rec_4_interest': document['rec_4_interest'].value,
-              'rec_5_interest': document['rec_5_interest'].value
+              'rec_1_interest': document['rec_1'].attrs["value"],
+              'rec_2_interest': document['rec_2'].attrs["value"],
+              'rec_3_interest': document['rec_3'].attrs["value"],
+              'rec_4_interest': document['rec_4'].attrs["value"],
+              'rec_5_interest': document['rec_5'].attrs["value"]
             }
           data = json.dumps(user_inputs)
-          print(data)
           req.send(data)
           
       document["score_button"].bind("click", get_user_scores, show_random_places)
@@ -238,6 +237,48 @@
       document["place_8_slider"].bind("change", update_place_8_label)
       document["place_9_slider"].bind("change", update_place_9_label)
       document["place_10_slider"].bind("change", update_place_10_label)
+      
+      def rate_1_up(ev):
+          document["rec_1"].attrs["value"] = 1
+          
+      def rate_2_up(ev):
+          document["rec_2"].attrs["value"] = 1
+          
+      def rate_3_up(ev):
+          document["rec_3"].attrs["value"] = 1
+          
+      def rate_4_up(ev):
+          document["rec_4"].attrs["value"] = 1
+          
+      def rate_5_up(ev):
+          document["rec_5"].attrs["value"] = 1
+          
+      def rate_1_down(ev):
+          document["rec_1"].attrs["value"] = 0
+          
+      def rate_2_down(ev):
+          document["rec_2"].attrs["value"] = 0
+          
+      def rate_3_down(ev):
+          document["rec_3"].attrs["value"] = 0
+          
+      def rate_4_down(ev):
+          document["rec_4"].attrs["value"] = 0
+          
+      def rate_5_down(ev):
+          document["rec_5"].attrs["value"] = 0
+      
+      document["thumbs_up_1"].bind("click", rate_1_up)
+      document["thumbs_up_2"].bind("click", rate_2_up)
+      document["thumbs_up_3"].bind("click", rate_3_up)
+      document["thumbs_up_4"].bind("click", rate_4_up)
+      document["thumbs_up_5"].bind("click", rate_5_up)
+      
+      document["thumbs_down_1"].bind("click", rate_1_down)
+      document["thumbs_down_2"].bind("click", rate_2_down)
+      document["thumbs_down_3"].bind("click", rate_3_down)
+      document["thumbs_down_4"].bind("click", rate_4_down)
+      document["thumbs_down_5"].bind("click", rate_5_down)
 
      
     </script>
@@ -378,59 +419,49 @@
      
            
       <div id="final_recs" style="display:none"> 
-        <form id=interest_questions>
         
         <h2>Here are your recommendations! Let us know if you are interested in the destinations</h2>
-        <div id=rec_1>rec 1</div>
+        <div id=rec_1 value=0>rec 1</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_1_img>
-        </div>
+        </div>          
+        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_1"/>
+        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_1"/>    
+
             
-        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up"/>
-        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down"/>    
-<!--       
-        <input type="radio" name="choice" value="1"> Interested!
-        <input type="radio" name="choice" value="0"> Not interested
-         -->
-            
-        <div id=rec_2>rec 2</div>
+        <div id=rec_2 value=0>rec 2</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_2_img>
         </div>
         
-        <input type="radio" name="choice" value="1"> Interested!
-        <input type="radio" name="choice" value="0"> Not interested
+        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_2"/>
+        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_2"/> 
             
-        <div id=rec_3>rec 3</div>
+        <div id=rec_3 value=0>rec 3</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_3_img>
         </div>
             
-        <input type="radio" name="choice" value="1"> Interested!
-        <input type="radio" name="choice" value="0"> Not interested
+        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_3"/>
+        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_3"/> 
             
-        <div id=rec_4>rec 4</div>
+        <div id=rec_4 value=0>rec 4</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_4_img>
         </div>
             
-        <input type="radio" name="choice" value="1"> Interested!
-        <input type="radio" name="choice" value="0"> Not interested
+        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_4"/>
+        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_4"/> 
         
-        <div id=rec_5>rec 5</div>
+        <div id=rec_5 value=0>rec 5</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=rec_5_img>
         </div>
         
-        <input type="radio" name="choice" value="1"> Interested!
-        <input type="radio" name="choice" value="0"> Not interested
+        <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_5"/>
+        <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_5"/> 
             
         <button id="satisfaction_button">Thank you!</button>
-        </form> 
      </div>
   </body>
 </html>
-
-
-
-

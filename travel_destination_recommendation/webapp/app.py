@@ -127,25 +127,18 @@ def recommend():
     
     # convert cities to strings
     random_recs = [rec for rec in random_recs]
-    print(random_recs)
     random_recs_string = [str(rec) for rec in random_recs]
-    print(random_recs_string)
     
     # add to mongodb collection
     city_ratings = dict(zip(random_recs_string, user_ratings))
     user_coll.insert_one(city_ratings)
-    print("inserting worked")
     
     # create a visited cities list
     visited = []
     print(visited)
     for ind, rating in enumerate(user_ratings):
-        print("in the for loop")
         if rating != 0:
-            print("in the if statement")
             visited.append(random_recs[ind])
-    print(visited)
-    
  
     updated_scores = update_user_scores(user_score, random_recs_string, user_ratings, cities)
     updated_recs = update_recommendations(nn_model, cities, updated_scores, visited)
