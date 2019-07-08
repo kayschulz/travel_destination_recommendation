@@ -175,8 +175,8 @@ img::-moz-selection {
 
 header.masthead {
   text-align: center;
-  color: cyan;
-  background-image: url("../images/coastal.jpg");
+  color: white;
+  background-image: url("../images/europe.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
