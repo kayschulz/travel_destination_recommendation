@@ -139,9 +139,89 @@
                  document["place_1_label"].textContent = "Have been and liked"
              else:
                  document["place_1_label"].textContent = "Have not been"
-
-     
-             
+      
+      def update_place_2_label(ev):
+             place_2_val = document["place_2_slider"].value
+             if place_2_val == "-1":
+                 document["place_2_label"].textContent = "Have been and disliked"
+             elif place_2_val == "1":
+                 document["place_2_label"].textContent = "Have been and liked"
+             else:
+                 document["place_2_label"].textContent = "Have not been"
+      
+      def update_place_3_label(ev):
+             place_3_val = document["place_3_slider"].value
+             if place_3_val == "-1":
+                 document["place_3_label"].textContent = "Have been and disliked"
+             elif place_3_val == "1":
+                 document["place_3_label"].textContent = "Have been and liked"
+             else:
+                 document["place_3_label"].textContent = "Have not been"                 
+      
+      def update_place_4_label(ev):
+             place_4_val = document["place_4_slider"].value
+             if place_4_val == "-1":
+                 document["place_4_label"].textContent = "Have been and disliked"
+             elif place_4_val == "1":
+                 document["place_4_label"].textContent = "Have been and liked"
+             else:
+                 document["place_4_label"].textContent = "Have not been"     
+      
+      def update_place_5_label(ev):
+             place_5_val = document["place_5_slider"].value
+             if place_5_val == "-1":
+                 document["place_5_label"].textContent = "Have been and disliked"
+             elif place_5_val == "1":
+                 document["place_5_label"].textContent = "Have been and liked"
+             else:
+                 document["place_5_label"].textContent = "Have not been"
+      
+      def update_place_6_label(ev):
+             place_6_val = document["place_6_slider"].value
+             if place_6_val == "-1":
+                 document["place_6_label"].textContent = "Have been and disliked"
+             elif place_6_val == "1":
+                 document["place_6_label"].textContent = "Have been and liked"
+             else:
+                 document["place_6_label"].textContent = "Have not been"                 
+      
+      def update_place_7_label(ev):
+             place_7_val = document["place_7_slider"].value
+             if place_7_val == "-1":
+                 document["place_7_label"].textContent = "Have been and disliked"
+             elif place_7_val == "1":
+                 document["place_7_label"].textContent = "Have been and liked"
+             else:
+                 document["place_7_label"].textContent = "Have not been"                 
+      
+      def update_place_8_label(ev):
+             place_8_val = document["place_8_slider"].value
+             if place_8_val == "-1":
+                 document["place_8_label"].textContent = "Have been and disliked"
+             elif place_8_val == "1":
+                 document["place_8_label"].textContent = "Have been and liked"
+             else:
+                 document["place_8_label"].textContent = "Have not been"                 
+      
+      def update_place_9_label(ev):
+             place_9_val = document["place_9_slider"].value
+             if place_9_val == "-1":
+                 document["place_9_label"].textContent = "Have been and disliked"
+             elif place_9_val == "1":
+                 document["place_9_label"].textContent = "Have been and liked"
+             else:
+                 document["place_9_label"].textContent = "Have not been"                 
+      
+      def update_place_10_label(ev):
+             place_10_val = document["place_10_slider"].value
+             if place_10_val == "-1":
+                 document["place_10_label"].textContent = "Have been and disliked"
+             elif place_10_val == "1":
+                 document["place_10_label"].textContent = "Have been and liked"
+             else:
+                 document["place_10_label"].textContent = "Have not been"                 
+                 
+                 
       document["forest_slider"].bind("change", update_forest_slider_label)
       document["castle_slider"].bind("change", update_castle_slider_label)
       document["water_slider"].bind("change", update_water_slider_label)
