@@ -17,6 +17,7 @@
               change_place_names(cities)
           else:
               warnings.warn(response.text)
+              
       def get_user_scores(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
@@ -88,6 +89,7 @@
               pass   
           else:
               warnings.warn(response.text)
+              
       def get_satisfaction(ev):
           """Get the predicted probability."""
           req = ajax.ajax()
@@ -128,6 +130,16 @@
       def update_urban_slider_label(ev):
              urban_slide_val = document["urban_slider"].value
              document["urban_label"].textContent = urban_slide_val
+      
+      def update_place_1_label(ev):
+             place_1_val = document["place_1_slider"].value
+             if place_1_val == "-1":
+                 document["place_1_label"].textContent = "Have been and disliked"
+             elif place_1_val == "1":
+                 document["place_1_label"].textContent = "Have been and liked"
+             else:
+                 document["place_1_label"].textContent = "Have not been"
+
      
              
       document["forest_slider"].bind("change", update_forest_slider_label)
@@ -135,6 +147,17 @@
       document["water_slider"].bind("change", update_water_slider_label)
       document["historical_slider"].bind("change", update_historical_slider_label)
       document["urban_slider"].bind("change", update_urban_slider_label)
+
+      document["place_1_slider"].bind("change", update_place_1_label)
+      document["place_2_slider"].bind("change", update_place_2_label)
+      document["place_3_slider"].bind("change", update_place_3_label)
+      document["place_4_slider"].bind("change", update_place_4_label)
+      document["place_5_slider"].bind("change", update_place_5_label)
+      document["place_6_slider"].bind("change", update_place_6_label)
+      document["place_7_slider"].bind("change", update_place_7_label)
+      document["place_8_slider"].bind("change", update_place_8_label)
+      document["place_9_slider"].bind("change", update_place_9_label)
+      document["place_10_slider"].bind("change", update_place_10_label)
 
      
     </script>
@@ -183,57 +206,87 @@
       
      
     <div id="random_recs" style="display:none">   
-        <h2>If you have been and liked type 1, if you have been and disliked type -1, if you have not been type 0</h2>
+        <h2>Slide right if you have been to the location and liked it. Slide left if you have been to the location and did not like it. Do nothing if you have not been to the location.</h2>
         <div id=place_1>place 1</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_1_img>
         </div>
-        <textarea id="place_1_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_1_slider">
+            <span id="place_1_label">Have not been</span>
+        </div>        
         <div id=place_2>place 2</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_2_img>
         </div>
-        <textarea id="place_2_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_2_slider">
+            <span id="place_2_label">Have not been</span>
+        </div> 
         <div id=place_3>place 3</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_3_img>
         </div>
-        <textarea id="place_3_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_3_slider">
+            <span id="place_3_label">Have not been</span>
+        </div>
         <div id=place_4>place 4</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_4_img>
         </div>
-        <textarea id="place_4_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_5_slider">
+            <span id="place_5_label">Have not been</span>
+        </div>
         <div id=place_5>place 5</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_5_img>
         </div>
-        <textarea id="place_5_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_5_slider">
+            <span id="place_5_label">Have not been</span>
+        </div>
         <div id=place_6>place 6</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_6_img>
         </div>
-        <textarea id="place_6_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_6_slider">
+            <span id="place_6_label">Have not been</span>
+        </div>
         <div id=place_7>place 7</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_7_img>
         </div>
-        <textarea id="place_7_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_7_slider">
+            <span id="place_7_label">Have not been</span>
+        </div>
         <div id=place_8>place 8</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_8_img>
         </div>
-        <textarea id="place_8_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_8_slider">
+            <span id="place_8_label">Have not been</span>
+        </div>
         <div id=place_9>place 9</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_9_img>
         </div>
-        <textarea id="place_9_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_9_slider">
+            <span id="place_9_label">Have not been</span>
+        </div>
         <div id=place_10>place 10</div>
         <div>
             <img src="images/historical.jpg" width="100" height="80" id=place_10_img>
         </div>
-        <textarea id="place_10_rating"></textarea>
+        <div class="slidecontainer">
+            <input type="range" min="-1" max="1" value="0" class="slider" id="place_10_slider">
+            <span id="place_10_label">Have not been</span>
+        </div>
         <button id="city_rating_button">Find Top 5 Destinations</button>
      </div>
      
