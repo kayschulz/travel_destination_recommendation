@@ -8,154 +8,332 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
+  <link rel="icon" href="data:;base64,=">
+
   <title>Agency - Start Bootstrap Theme</title>
+  
+  <script type="text/javascript" src="brython.js"></script>
+  <script type="text/javascript" src="brython_stdlib.js"></script>
 
   <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
   <!-- Custom styles for this template -->
-  <link href="css/agency.min.css" rel="stylesheet">
+  <link href="css/agency.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top" onload="brython(1)">
+  <script type="text/python3">
+    from browser import document, ajax
+    import json
+    import warnings
+  
+    def update_forest_slider_label(ev):
+      forest_slide_val = document["forest_slider"].value
+      document["forest_label"].textContent = forest_slide_val
+
+    def update_castle_slider_label(ev):
+      castle_slide_val = document["castle_slider"].value
+      document["castle_label"].textContent = castle_slide_val
+
+    def update_water_slider_label(ev):
+      water_slide_val = document["water_slider"].value
+      document["water_label"].textContent = water_slide_val
+
+    def update_historical_slider_label(ev):
+      historical_slide_val = document["historical_slider"].value
+      document["historical_label"].textContent = historical_slide_val
+
+    def update_urban_slider_label(ev):
+      urban_slide_val = document["urban_slider"].value
+      document["urban_label"].textContent = urban_slide_val
+    
+    document["forest_slider"].bind("change", update_forest_slider_label)
+    document["castle_slider"].bind("change", update_castle_slider_label)
+    document["water_slider"].bind("change", update_water_slider_label)
+    document["historical_slider"].bind("change", update_historical_slider_label)
+    document["urban_slider"].bind("change", update_urban_slider_label)
+    
+    def get_random_cities(response):
+        if response.status==200 or response.status==0:
+            cities = json.loads(response.text)
+            change_place_names(cities)
+        else:
+            warnings.warn(response.text)
+        
+    def change_place_names(cities):
+      for k, v in cities.items():
+        place = repr(v)
+        city_country = place.replace("'", "").replace("[", "").replace("]", "")
+        city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
+        document[f"place_{int(k)+1}"].textContent = city_country
+        document[f"place_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
+    
+    def get_user_scores(ev):
+        """Get the predicted probability."""
+        req = ajax.ajax()
+        req.bind('complete', get_random_cities)
+        req.open('POST', '/scores', False)
+        req.set_header('content-type','application/json')
+        user_inputs = {
+            'user_input_forest': document['forest_slider'].value,
+            'user_input_castle': document['castle_slider'].value,
+            'user_input_water': document['water_slider'].value,
+            'user_input_historical': document['historical_slider'].value,
+            'user_input_urban': document['urban_slider'].value
+          }
+        data = json.dumps(user_inputs)
+        req.send(data)
+          
+    def show_random_places(ev):
+        document["random"].style.display = "inline"
+    
+    document["score_button"].bind("click", get_user_scores, show_random_places)
+  </script>
   <!-- Header -->
   <header class="masthead">
     <div class="container">
       <div class="intro-text">
         <div class="intro-heading text-uppercase">Take me to Europe</div>
-        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Begin</a>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#features">Begin</a>
       </div>
     </div>
   </header>
 
-  <!-- Services -->
-  <section class="page-section" id="services">
+  <!-- Features -->
+  <section class="page-section" id="features">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">What is the setting of your trip?</h2>
+          <h2 class="section-heading text-uppercase">Trip Environment</h2>
           <h3 class="section-subheading text-muted">Rate importance of traits from 0 (not important) to 10 (very important)</h3>
         </div>
       </div>
+
       <div class="row text-center">
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+            <!-- <img src="images/forest_mountain.jpg"> -->
           </span>
           <h4 class="service-heading">Forest/Mountain</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" step="1" value="5" id="forest_slider" class="slider"/>
+            <span id="forest_label">5</span>
+          </div>
         </div>
+
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+            <!-- <img src="images/palace_castle.jpg" width="100" height="80"> -->
           </span>
           <h4 class="service-heading">Castles</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="castle_slider">
+            <span id="castle_label">5</span>
+          </div>
         </div>
+
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+            <!-- <img src="images/coastal.jpg" width="100" height="80"> -->
           </span>
           <h4 class="service-heading">Water</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="water_slider">
+            <span id="water_label">5</span>
+          </div>
         </div>
+
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+            <!-- <img src="images/historical.jpg" width="100" height="80"> -->
           </span>
           <h4 class="service-heading">Historical</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="historical_slider">
+            <span id="historical_label">5</span>
+          </div>
         </div>
+
         <div class="col-md-4">
           <span class="fa-stack fa-4x">
             <i class="fas fa-circle fa-stack-2x text-primary"></i>
             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+            <!-- <img src="images/urban.jpg" width="100" height="80"> -->
           </span>
           <h4 class="service-heading">Urban</h4>
-          <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="urban_slider">
+            <span id="urban_label">5</span>
+          </div>
         </div>
+
+        <div class="col-md-4">
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#random" id="score_button">Next!</a>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Portfolio Grid -->
-  <section class="bg-light page-section" id="portfolio">
+  <!-- Random Cities -->
+  <!--  
+  
+  <div id=place_2>place 2</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_2_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_2_slider">
+      <span id="place_2_label">Have not been</span>
+  </div> 
+  
+  <div id=place_3>place 3</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_3_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_3_slider">
+      <span id="place_3_label">Have not been</span>
+  </div>
+  
+  <div id=place_4>place 4</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_4_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_4_slider">
+      <span id="place_4_label">Have not been</span>
+  </div>
+  
+  <div id=place_5>place 5</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_5_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_5_slider">
+      <span id="place_5_label">Have not been</span>
+  </div>
+  <div id=place_6>place 6</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_6_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_6_slider">
+      <span id="place_6_label">Have not been</span>
+  </div>
+  <div id=place_7>place 7</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_7_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_7_slider">
+      <span id="place_7_label">Have not been</span>
+  </div>
+  <div id=place_8>place 8</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_8_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_8_slider">
+      <span id="place_8_label">Have not been</span>
+  </div>
+  <div id=place_9>place 9</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_9_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_9_slider">
+      <span id="place_9_label">Have not been</span>
+  </div>
+  <div id=place_10>place 10</div>
+  <div>
+      <img src="images/historical.jpg" width="100" height="80" id=place_10_img>
+  </div>
+  <div class="slidecontainer">
+      <input type="range" min="-1" max="1" value="0" class="slider" id="place_10_slider">
+      <span id="place_10_label">Have not been</span>
+  </div>
+  <button id="city_rating_button">Find Top 5 Destinations</button>
+</div> -->
+  <section class="bg-light page-section" id="random" style="display:inline">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Portfolio</h2>
-          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+          <h2 class="section-heading text-uppercase">Previous Experience</h2>
+          <h3 class="section-subheading text-muted">Move the slider right if you have been to the given location and you LIKED it. Move it to the left if you have been to the given location and disliked it. Leave the slider in the middle if you haven't been to the location</h3>
         </div>
       </div>
+
       <div class="row">
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/01-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_1_img">
           </a>
           <div class="portfolio-caption">
-            <h4>Threads</h4>
-            <p class="text-muted">Illustration</p>
+            <h4 id="place_1">Place 1</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_1_slider">
+              <span id="place_1_label">Have not been</span>
+            </div>
           </div>
         </div>
+        
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/02-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_2_img">
           </a>
           <div class="portfolio-caption">
-            <h4>Explore</h4>
-            <p class="text-muted">Graphic Design</p>
+            <h4 id="place_2">Place 2</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_2_slider">
+              <span id="place_2_label">Have not been</span>
+            </div>
           </div>
         </div>
+
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/03-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_3_img">
           </a>
           <div class="portfolio-caption">
-            <h4>Finish</h4>
-            <p class="text-muted">Identity</p>
+            <h4 id="place_3">Place 3</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_3_slider">
+              <span id="place_3_label">Have not been</span>
+            </div>
           </div>
         </div>
+
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal4">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/04-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_4_img">
           </a>
           <div class="portfolio-caption">
-            <h4>Lines</h4>
-            <p class="text-muted">Branding</p>
+            <h4 id="place_4">Place 4</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_4_slider">
+              <span id="place_4_label">Have not been</span>
+            </div>
           </div>
         </div>
+        
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
             <div class="portfolio-hover">
@@ -680,18 +858,18 @@
   </div>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/jquery/jquery.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.js"></script>
 
   <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="vendor/jquery-easing/jquery.easing.js"></script>
 
   <!-- Contact form JavaScript -->
   <script src="js/jqBootstrapValidation.js"></script>
   <script src="js/contact_me.js"></script>
 
   <!-- Custom scripts for this template -->
-  <script src="js/agency.min.js"></script>
+  <script src="js/agency.js"></script>
 
 </body>
 

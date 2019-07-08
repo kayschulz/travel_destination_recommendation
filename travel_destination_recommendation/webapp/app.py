@@ -29,7 +29,7 @@ Session(app)
 @app.route('/')
 def index():
     """Return the main page."""
-    return render_template('index.html')
+    return render_template('theme.html')
 
 
 @app.route('/scores', methods=['GET', 'POST'])
