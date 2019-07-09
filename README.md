@@ -1,20 +1,28 @@
 # European Travel Recommendation
 
 ## Business Understanding
-I never traveled as a child, but I always wanted to. Now that I’m an adult and can pay for my own vacations, I want to travel, but I never know where to go. I would like to create an application that features a short interest quiz to give recommendations on where to travel based on the results of the quiz.
+I often find that I have the time, means, and desire to go on vaction, but unless I have family obligations, I have no clue where I to go. I have created an application that takes into account certain features (often setting features) that are of interest when taking a trip. Using this user input as well as some knowledge of the user's previous experience, the application will recommend the 5 European destinations that are most similar to their rating of the features.
 
 ## Data Understanding
-I have yet to find a resource that has a clear layout of descriptions of cities around the world. However, I have found ricksteves.com which only contains European cities, but each city has the same web structure. I would like to scrape ricksteves.com for short summaries on both country and city. I may also want to scrape some of the pictures and experiences, but this may be a stretch goal. 
+I used Selenium to scrape text summaries ricksteves.com as well as Wikipedia. I additionally scraped photos from Rick Steves for use on the website. Please note that the XPath I used for images has changed since I completed scraping for the project. I stored these summaries in MongoDB collections.
 
 ## Data Preparation
-I’m not sure how exactly to prepare the data yet, as I will largely be making my own dataset. I may use NLP for topic model
+I used both text summaries for a city to perform LDA topic modeling. To perform the LDA model, I had to add additional stop words so that I would not get topics such as "French" or "European". I utilized gensim to tokenize my text.
+From LDA modeling I discovered 5 clear topics:
+* Forest/Mountain
+* Palaces/Castles
+* Coastal/Water
+* Historical
+* Urban
+
+Once I had the LDA model, I scored each summary by the probability it belonged to a topic. I then used the average of the Rick Steve and Wikipedia summary scores to give each city an aggregate score for each topic.
 
 ## Modeling
-I'll set aside a final validation set of feature labeled cities, maybe 20%. I want to make a cold-start model of a recommendation system as I will not have user data. Since this data is not labeled, I will likely use a KNN model. 
+I created a cold start recommendation system that uses nearest neighbors with Euclidean distance to make recommendations. The model takes in user scores on the same five topics and gives back the 50 closest neighbors. Ten of these 50 are then randomly selected to collect information on user's previous experience. If one of these ten cities has been visited by the user, the initial topic ratings are adjusted by becoming more similar to visited cities they liked, and less similar to visited cities that they disliked. These previous experience ratings are also saved in MongoDB for future implementation of an ALS model. The updated ratings go back into the nearest neighbors model, a new 50 closest are generated, but only the top 5 are shown to the user. 
 
 ## Evaluation
-Since I will not have user data in the construction of the model, can’t objectively evaluate the model before deployment. I will however, ask users to rate their recommendations for subjectective evaluation of the recommender.
+Since I will not have user data in the construction of the model, can’t objectively evaluate the model before deployment. Therefore, when the 5 top destinations are shown, I ask the user if they would be interested in visiting the given destination. I can then subjectively see how well the model is performing.
 
 ## Deployment
-The model will be deployed using a Flask app. When the user goes to the website, they will click on pictures of scenery/activities that appeal to their travel needs. When the user is satisfied with their decisions they will press a button “Find my travel destination” that will reveal the five predicted locations based on their criteria. A retroactive question will be asked “If you have been to _blank_; did you like or dislike?”. Then a final five prediction will be given due to this additional feedback. The final prediction will also have a question for tracking evaluation: “thumbs up / thumbs down”. 
+The model will be deployed using a Flask app. The user first uses a slider bar to rate the setting options. When they select `Next` the ten random cities will be shown. The user then slides a bar to the left or right (been and disliked, been and liked respectively) or keeps it in the middle (have not been). The user then selects a button `Show Recommendations` which shows their recommendation. If the user clicks on the picture, a pop-up appears with the short Rick Steves summary and a link to the appropriate page on his website. This section also asks users for input on interest in their recommendations with a thumbs up thumbs down button. 
 
