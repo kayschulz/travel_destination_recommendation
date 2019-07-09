@@ -25,40 +25,87 @@ def collect_all_data(browser, country_url,
     and insert into MongoDB collections
     """
     browser.get(country_url)
-    country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
-    country = browser.find_element_by_xpath(country_path).text
-    summary_path = '//*[@id="body"]/div[2]/div[1]/div/div[3]/p'
-    country_summary = browser.find_element_by_xpath(summary_path).text
+    country = collect_country_name(browser)
+    country_summary = collect_country_summary(browser)    
     country_dict = {'country': country, 'country_summary': country_summary}
-    country_collection.insert_one(country_dict)
+    country_collection.insert_one(country_dict)   
     time.sleep(np.random.randint(10, 60))
     print(f'Inserted {country} into country collection')
     city_path = '/europe/' + country.lower() + '/'
-    city_urls = collect_urls(browser, city_path)
+    city_urls = collect_urls(browser, city_path) 
     for city in city_urls:
         collect_city_data(browser, city, country, city_collection)
+        #get_city_photos(browser, city_df, country_url)
         time.sleep(np.random.randint(10, 30))
-    print(f'Completed scrapping {country}')
+    print(f'Completed scraping {country}')
 
+def collect_country_name(browser):
+    """Collects the country name from ricksteves.com""""
+    country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+    country = browser.find_element_by_xpath(country_path).text 
+    return country
 
+def collect_country_summary(browser):
+    """Collects the country summary from ricksteves.com"""
+    summary_path = '//*[@id="body"]/div[2]/div[1]/div/div[3]/p'
+    country_summary = browser.find_element_by_xpath(summary_path).text
+    return country_summary
+    
 def collect_city_data(browser, city_url, country, city_collection):
     """
-    Gather the city summary and add to the city
+    Gather the city summary, photo, and url and add to the city
     MongoDB collection
     """
     browser.get(city_url)
     try:
-        city_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
-        city = browser.find_element_by_xpath(city_path).text
-        summary_path = '//*[@id="body"]/div[2]/div[1]/div/div[3]/p'
-        summary = browser.find_element_by_xpath(summary_path).text
-        city_dict = {'city': city, 'country': country, 'city_summary': summary}
+        city = collect_city_name(browser)
+        summary = collect_city_summary(browser)
+        
+        city_dict = {'city': city, 'country': country, 'city_summary': summary, 'city_url': city_url}
         city_collection.insert_one(city_dict)
         print(f'Inserted {city}, {country} into city collection')
     except:
         None
 
+def collect_city_name(browser):
+    """Collects the city name from ricksteves.com"""
+    city_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+    city = browser.find_element_by_xpath(city_path).text
+    return city
 
+def collect_city_summary(browser):
+    """
+    Collects the city summary from ricksteves.com
+    """
+    summary_path = '//*[@id="body"]/div[2]/div[1]/div/div[3]/p'
+    summary = browser.find_element_by_xpath(summary_path).text
+    return summary
+
+def collect_city_photo(browser, country_url):
+    """
+    Collects the header photo from ricksteves.com
+    """
+    browser.get(country_url)
+    country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+    country = browser.find_element_by_xpath(country_path).text
+
+    city_path = '/europe/' + country.lower() + '/'
+    city_urls = collect_urls(browser, city_path)
+    for city_url in city_urls:
+        browser.get(city_url)
+        time.sleep(np.random.randint(10, 30))
+        try:
+            city_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
+            city = browser.find_element_by_xpath(city_path).text
+            image_path = '//*[@id="slideshow1_s0"]/figure/img'
+            image = browser.find_element_by_xpath(image_path)
+            img_url = image.get_attribute('src')
+            filename = 'images/' + city.lower() + '.jpg'
+            urllib.request.urlretrieve(str(img_url), filename=str(filename))
+        except:
+            continue
+    
+        
 def get_wiki_description(browser, city, wiki_collection):
     """
     Get the wikipedia text entry of the city.
@@ -82,6 +129,9 @@ def get_wiki_description(browser, city, wiki_collection):
 
 
 def replace_df_text(browser, city, df):
+    """
+    Replaces text summaries in a data frame with the text from a wikipedia article
+    """
     url = 'https://en.wikipedia.org/wiki/' + city[1].replace(' ', '_')
     browser.get(url)
     summary = ''
@@ -94,30 +144,3 @@ def replace_df_text(browser, city, df):
             None
     df.loc[df['city'] == city[0], 'text'] = summary
     
-    
-
-def get_city_photos(browser, city_df, country_url):
-    """
-    doc string
-    """
-    browser.get(country_url)
-    country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
-    country = browser.find_element_by_xpath(country_path).text
-    
-    city_path = '/europe/' + country.lower() + '/'
-    city_urls = collect_urls(browser, city_path)
-    for city_url in city_urls:
-        browser.get(city_url)
-        time.sleep(np.random.randint(10, 30))
-        try:
-            city_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
-            city = browser.find_element_by_xpath(city_path).text
-            image = browser.find_element_by_xpath('//*[@id="slideshow1_s0"]/figure/img')
-            img_url = image.get_attribute('src')
-            filename = 'images/' + city.lower() + '.jpg'
-            urllib.request.urlretrieve(str(img_url), filename=str(filename))
-            city_df.loc[city_df['city'] == city, 'url'] = city_url
-            city_df.loc[city_df['city'] == city, 'image'] = image_url            
-        except:
-            continue
-        

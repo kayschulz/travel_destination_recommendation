@@ -4,24 +4,26 @@ import pandas as pd
 import numpy as np
 import pymongo
 
+# Connect to MongoDB Atlas Database
 with open('.secrets/password.txt', 'r') as f:
     conn_string = f.read().strip()
-    
+
 mc = pymongo.MongoClient(conn_string)
 city_db = mc['city_database']
 user_coll = city_db['user_collection']
-user_satisfaction = city_db['user_satistaction']
+user_satisfaction = city_db['user_satisfaction']
 
 
 def get_initial_user_score():
     """Collect initial user score"""
-    
+
     print('''Rate on a scale of 0-10.
     0 is not important and 10 is very important''')
 
     topics = ['a forest/mountain setting', 'visiting palaces/castles',
-              'a coastal/water setting', 'historical sites', 'an urban setting']
-    
+              'a coastal/water setting', 'historical sites',
+              'an urban setting']
+
     user_scores = [float(input(f"How important is {topic}: ")) / 10
                    for topic in topics]
     print('\n')
@@ -55,10 +57,13 @@ def get_city_scores(cities_df, city):
     """
     Retrieve the topic scores for a specific city.
     """
+    print(city)
+    print(type(city))
     topics = ['forest_mountain', 'palaces',
               'island_water', 'historical_ww2', 'urban']
     city_score = cities_df.loc[cities_df['city'] == city,
                                topics].values.tolist()
+    print(city_score)
     return city_score
 
 
@@ -121,14 +126,17 @@ def get_user_city_ratings(nn_model, cities, user_score,
     """
     closest = recommend_nn(nn_model, cities, user_score)
     user_dict = {}
+
     random_recs = get_random_recs(closest)
     city_ratings = []
+
     for i, rec in enumerate(random_recs):
         rating = int(input(f"Rate {random_recs[i]}: "))
         city_ratings.append(rating)
         user_dict[str(rec)] = rating
         if rating != 0:
             visited.append(rec)
+
     # new closest
     closest = get_updated_n_recommendation(user_score, cities,
                                            random_recs, nn_model,
@@ -145,20 +153,24 @@ def make_recommendations(cities_df, nn_model, visited_cities=None):
     """
     if visited_cities is None:
         visited_cities = []
-        
+
     user_score = get_initial_user_score()
     print('''For the following locations give:
             \t1 if you have visited and liked
             \t-1 if you have visited and disliked
             \t0 if you have never been''')
+
     closest = get_user_city_ratings(nn_model, cities_df,
                                     user_score, visited_cities)
     return closest[0:5]
 
 
 def rate_recs(recommendations):
+    """
+    Asks the user to rate, by interest, their recommended destinations
+    """
     interest = []
-    print('If interested enter 1, else 0')
+    print('If interested in visiting enter 1, else 0')
     for rec in recommendations:
         interest.append(int(input(str(rec[0]) + ': ')))
     satisfaction = {'satisfaction_score': sum(interest) / 5}

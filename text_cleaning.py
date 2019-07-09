@@ -712,8 +712,12 @@ def get_aggregate_score(lda_model, bow_corpus, i=0):
     """
     Get the combined aggregate score for topics using rick_steves and wikipedia
     """
+    # scores for each summary
     rick_steves = lda_model[bow_corpus[i]]
     wikipedia = lda_model[bow_corpus[i+213]]
+
+    # some wiki summaries have probability of 0 which does not automatically
+    # appear in scoring of lda. Adds the 0 score
     if len(wikipedia) != 5:
         indices = []
         for item in wikipedia:
@@ -721,9 +725,16 @@ def get_aggregate_score(lda_model, bow_corpus, i=0):
         for index in list(range(5)):
             if index not in indices:
                 wikipedia.append((index, 0))
+
+    # generate the aggregate score as mean value
     aggregate = {}
     for index, score in rick_steves:
         rs_score = score
         wiki_score = wikipedia[index][1]
         aggregate[index] = np.mean([score, wiki_score])
     return aggregate
+
+
+def replace_periods(string):
+    """Replaces periods with nothing"""
+    return string.replace('.', '')

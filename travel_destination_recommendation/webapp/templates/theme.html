@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="icon" href="data:;base64,=">
+
+  <title>European Travel Recommender</title>
+  
+  <script type="text/javascript" src="brython.js"></script>
+  <script type="text/javascript" src="brython_stdlib.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/agency.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top" onload="brython(1)">
+  <script type="text/python3">
+    from browser import document, ajax
+    import json
+    import warnings
+  
+    def update_forest_slider_label(ev):
+      forest_slide_val = document["forest_slider"].value
+      document["forest_label"].textContent = forest_slide_val
+
+    def update_castle_slider_label(ev):
+      castle_slide_val = document["castle_slider"].value
+      document["castle_label"].textContent = castle_slide_val
+
+    def update_water_slider_label(ev):
+      water_slide_val = document["water_slider"].value
+      document["water_label"].textContent = water_slide_val
+
+    def update_historical_slider_label(ev):
+      historical_slide_val = document["historical_slider"].value
+      document["historical_label"].textContent = historical_slide_val
+
+    def update_urban_slider_label(ev):
+      urban_slide_val = document["urban_slider"].value
+      document["urban_label"].textContent = urban_slide_val
+    
+    document["forest_slider"].bind("change", update_forest_slider_label)
+    document["castle_slider"].bind("change", update_castle_slider_label)
+    document["water_slider"].bind("change", update_water_slider_label)
+    document["historical_slider"].bind("change", update_historical_slider_label)
+    document["urban_slider"].bind("change", update_urban_slider_label)
+    
+    def get_random_cities(response):
+        if response.status==200 or response.status==0:
+            cities = json.loads(response.text)
+            change_place_names(cities)
+        else:
+            warnings.warn(response.text)
+        
+    def change_place_names(cities):
+      for k, v in cities.items():
+        place = repr(v)
+        city_country = place.replace("'", "").replace("[", "").replace("]", "")
+        city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
+        document[f"place_{int(k)+1}"].textContent = city_country
+        document[f"place_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
+    
+    def get_user_scores(ev):
+        """Get the predicted probability."""
+        req = ajax.ajax()
+        req.bind('complete', get_random_cities)
+        req.open('POST', '/scores', False)
+        req.set_header('content-type','application/json')
+        user_inputs = {
+            'user_input_forest': document['forest_slider'].value,
+            'user_input_castle': document['castle_slider'].value,
+            'user_input_water': document['water_slider'].value,
+            'user_input_historical': document['historical_slider'].value,
+            'user_input_urban': document['urban_slider'].value
+          }
+        data = json.dumps(user_inputs)
+        req.send(data)
+          
+    def show_random_places(ev):
+        document["random"].style.display = "inline"
+    
+    def scroll_to_random(ev):
+        document["random"].scrollIntoView()   
+
+    document["score_button"].bind("click", get_user_scores, show_random_places, scroll_to_random)
+
+    def update_place_1_label(ev):
+      place_1_val = document["place_1_slider"].value
+      if place_1_val == "-1":
+          document["place_1_label"].textContent = "Have been and disliked"
+      elif place_1_val == "1":
+          document["place_1_label"].textContent = "Have been and liked"
+      else:
+          document["place_1_label"].textContent = "Have not been"
+
+    def update_place_2_label(ev):
+      place_2_val = document["place_2_slider"].value
+      if place_2_val == "-1":
+          document["place_2_label"].textContent = "Have been and disliked"
+      elif place_2_val == "1":
+          document["place_2_label"].textContent = "Have been and liked"
+      else:
+          document["place_2_label"].textContent = "Have not been"
+
+    def update_place_3_label(ev):
+      place_3_val = document["place_3_slider"].value
+      if place_3_val == "-1":
+          document["place_3_label"].textContent = "Have been and disliked"
+      elif place_3_val == "1":
+          document["place_3_label"].textContent = "Have been and liked"
+      else:
+          document["place_3_label"].textContent = "Have not been"                 
+
+    def update_place_4_label(ev):
+      place_4_val = document["place_4_slider"].value
+      if place_4_val == "-1":
+          document["place_4_label"].textContent = "Have been and disliked"
+      elif place_4_val == "1":
+          document["place_4_label"].textContent = "Have been and liked"
+      else:
+          document["place_4_label"].textContent = "Have not been"     
+
+    def update_place_5_label(ev):
+      place_5_val = document["place_5_slider"].value
+      if place_5_val == "-1":
+          document["place_5_label"].textContent = "Have been and disliked"
+      elif place_5_val == "1":
+          document["place_5_label"].textContent = "Have been and liked"
+      else:
+          document["place_5_label"].textContent = "Have not been"
+    
+    def update_place_6_label(ev):
+      place_6_val = document["place_6_slider"].value
+      if place_6_val == "-1":
+          document["place_6_label"].textContent = "Have been and disliked"
+      elif place_6_val == "1":
+          document["place_6_label"].textContent = "Have been and liked"
+      else:
+          document["place_6_label"].textContent = "Have not been"                 
+
+    def update_place_7_label(ev):
+      place_7_val = document["place_7_slider"].value
+      if place_7_val == "-1":
+          document["place_7_label"].textContent = "Have been and disliked"
+      elif place_7_val == "1":
+          document["place_7_label"].textContent = "Have been and liked"
+      else:
+          document["place_7_label"].textContent = "Have not been"                 
+
+    def update_place_8_label(ev):
+      place_8_val = document["place_8_slider"].value
+      if place_8_val == "-1":
+          document["place_8_label"].textContent = "Have been and disliked"
+      elif place_8_val == "1":
+          document["place_8_label"].textContent = "Have been and liked"
+      else:
+          document["place_8_label"].textContent = "Have not been"
+
+    def update_place_9_label(ev):
+      place_9_val = document["place_9_slider"].value
+      if place_9_val == "-1":
+          document["place_9_label"].textContent = "Have been and disliked"
+      elif place_9_val == "1":
+          document["place_9_label"].textContent = "Have been and liked"
+      else:
+          document["place_9_label"].textContent = "Have not been"
+
+    def update_place_10_label(ev):
+      place_10_val = document["place_10_slider"].value
+      if place_10_val == "-1":
+          document["place_10_label"].textContent = "Have been and disliked"
+      elif place_10_val == "1":
+          document["place_10_label"].textContent = "Have been and liked"
+      else:
+          document["place_10_label"].textContent = "Have not been"
+    
+    document["place_1_slider"].bind("change", update_place_1_label)
+    document["place_2_slider"].bind("change", update_place_2_label)
+    document["place_3_slider"].bind("change", update_place_3_label)
+    document["place_4_slider"].bind("change", update_place_4_label)
+    document["place_5_slider"].bind("change", update_place_5_label)
+    document["place_6_slider"].bind("change", update_place_6_label)
+    document["place_7_slider"].bind("change", update_place_7_label)
+    document["place_8_slider"].bind("change", update_place_8_label)
+    document["place_9_slider"].bind("change", update_place_9_label)
+    document["place_10_slider"].bind("change", update_place_10_label)
+
+    def get_recs(response):
+      if response.status==200 or response.status==0:
+        recommendations = json.loads(response.text)
+        clean_recommendations(recommendations)
+      else:
+        warnings.warn(response.text)
+            
+    def get_recommendations(ev):
+      """Get the predicted probability."""
+      req = ajax.ajax()
+      req.bind('complete', get_recs)
+      req.open('POST', '/recommend', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+          'user_input_place_1': document['place_1_slider'].value,
+          'user_input_place_2': document['place_2_slider'].value,
+          'user_input_place_3': document['place_3_slider'].value,
+          'user_input_place_4': document['place_4_slider'].value,
+          'user_input_place_5': document['place_5_slider'].value,
+          'user_input_place_6': document['place_6_slider'].value,
+          'user_input_place_7': document['place_7_slider'].value,
+          'user_input_place_8': document['place_8_slider'].value,
+          'user_input_place_9': document['place_9_slider'].value,
+          'user_input_place_10': document['place_10_slider'].value
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
+
+    def clean_recommendations(recommendations):
+      for k, v in recommendations.items():
+        place = repr(v)
+        city_country = place.replace("'", "").replace("[", "").replace("]", "")
+        city = place.split(",")[0].replace(" ", "_").lower().replace("[", "").replace("'", "")
+        document[f"rec_{int(k)+1}"].textContent = city_country
+        document[f"rec_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
+        document[f"modal_{int(k)+1}"].textContent = city_country
+        document[f"modal_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
+      get_recommendation_summaries()
+      get_recommendation_links()
+    
+    def update_summary(response):
+      if response.status==200 or response.status==0:
+        summaries = json.loads(response.text)
+        for k, summary in summaries.items():
+          document[f"modal_{int(k)+1}_summary"].textContent = summary
+      else:
+        warnings.warn(response.text)
+    def get_recommendation_summaries():
+      req = ajax.ajax()
+      req.bind('complete', update_summary)
+      req.open('POST', '/update_modal', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+          'city_1': document['rec_1'].textContent,
+          'city_2': document['rec_2'].textContent,
+          'city_3': document['rec_3'].textContent,
+          'city_4': document['rec_4'].textContent,
+          'city_5': document['rec_5'].textContent
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
+
+    def update_url(response):
+      if response.status==200 or response.status==0:
+        urls = json.loads(response.text)
+        for k, url in urls.items():
+          document[f"more_{int(k)+1}"].attrs['href'] = url
+      else:
+        warnings.warn(response.text)
+    def get_recommendation_links():
+      req = ajax.ajax()
+      req.bind('complete', update_url)
+      req.open('POST', '/update_modal_url', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+          'city_1': document['rec_1'].textContent,
+          'city_2': document['rec_2'].textContent,
+          'city_3': document['rec_3'].textContent,
+          'city_4': document['rec_4'].textContent,
+          'city_5': document['rec_5'].textContent
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
+    
+    def show_recommendations(ev):
+      document["final_recs"].style.display = "inline"
+    
+    def scroll_to_recs(ev):
+      document["final_recs"].scrollIntoView() 
+
+    document["city_rating_button"].bind("click", get_recommendations, show_recommendations, scroll_to_recs)
+
+    def rate_1_up(ev):
+      document["rec_1"].attrs["value"] = 1
+        
+    def rate_2_up(ev):
+      document["rec_2"].attrs["value"] = 1
+        
+    def rate_3_up(ev):
+      document["rec_3"].attrs["value"] = 1
+        
+    def rate_4_up(ev):
+      document["rec_4"].attrs["value"] = 1
+        
+    def rate_5_up(ev):
+      document["rec_5"].attrs["value"] = 1
+        
+    def rate_1_down(ev):
+      document["rec_1"].attrs["value"] = 0
+        
+    def rate_2_down(ev):
+      document["rec_2"].attrs["value"] = 0
+        
+    def rate_3_down(ev):
+      document["rec_3"].attrs["value"] = 0
+        
+    def rate_4_down(ev):
+      document["rec_4"].attrs["value"] = 0
+        
+    def rate_5_down(ev):
+      document["rec_5"].attrs["value"] = 0
+    
+    document["thumbs_up_1"].bind("click", rate_1_up)
+    document["thumbs_up_2"].bind("click", rate_2_up)
+    document["thumbs_up_3"].bind("click", rate_3_up)
+    document["thumbs_up_4"].bind("click", rate_4_up)
+    document["thumbs_up_5"].bind("click", rate_5_up)
+    
+    document["thumbs_down_1"].bind("click", rate_1_down)
+    document["thumbs_down_2"].bind("click", rate_2_down)
+    document["thumbs_down_3"].bind("click", rate_3_down)
+    document["thumbs_down_4"].bind("click", rate_4_down)
+    document["thumbs_down_5"].bind("click", rate_5_down)
+
+    def get_sats(response):
+      if response.status==200 or response.status==0:
+        document["thank_you_message"].textContent = "Thank you for your feedback"   
+      else:
+        warnings.warn(response.text)
+        
+    def get_satisfaction(ev):
+      """Get the predicted probability."""
+      req = ajax.ajax()
+      req.bind('complete', get_sats)
+      req.open('POST', '/rate_recs', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+        'rec_1_interest': document['rec_1'].attrs["value"],
+        'rec_2_interest': document['rec_2'].attrs["value"],
+        'rec_3_interest': document['rec_3'].attrs["value"],
+        'rec_4_interest': document['rec_4'].attrs["value"],
+        'rec_5_interest': document['rec_5'].attrs["value"]
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
+    
+    document["satisfaction_button"].bind("click", get_satisfaction)
+
+
+  </script>
+  <!-- Header -->
+  <header class="masthead">
+    <div class="container">
+      <div class="intro-text">
+        <div class="intro-lead-in">Want to travel, but don't know where to go?</div>
+        <div class="intro-heading text-uppercase">Let's go to Europe</div>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#features">Begin</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features -->
+  <section class="page-section" id="features">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Trip Environment</h2>
+          <h3 class="section-subheading text-muted">Rate importance of traits from 0 (not important) to 10 (very important)</h3>
+        </div>
+      </div>
+
+      <div class="row text-center">
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <img class="img-fluid" src="images/forest_mountain.jpg" alt="">
+          </span>
+          <h4 class="service-heading">Forest/Mountain</h4>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" step="1" value="5" id="forest_slider" class="slider"/>
+            <span id="forest_label">5</span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <img class="img-fluid" src="images/palace_castle.jpg" alt="">
+          </span>
+          <h4 class="service-heading">Castles</h4>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="castle_slider">
+            <span id="castle_label">5</span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <img class="img-fluid" src="images/coastal.jpg" alt="">
+          </span>
+          <h4 class="service-heading">Water</h4>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="water_slider">
+            <span id="water_label">5</span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <img class="img-fluid" src="images/historical.jpg" alt="">
+          </span>
+          <h4 class="service-heading">Historical</h4>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="historical_slider">
+            <span id="historical_label">5</span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <img class="img-fluid" src="images/urban.jpg" alt="">
+          </span>
+          <h4 class="service-heading">Urban</h4>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="urban_slider">
+            <span id="urban_label">5</span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" id="score_button">Next!</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Random Cities -->
+  <section class="bg-light page-section" id="random" style="display:none">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Previous Experience</h2>
+          <h3 class="section-subheading text-muted">Move the slider right if you have been to the given location and you LIKED it. Move it to the left if you have been to the given location and DISLIKED it. Leave the slider in the middle if you haven't been to the location</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_1_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_1">Place 1</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_1_slider">
+              <div id="place_1_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_2_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_2">Place 2</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_2_slider">
+              <div id="place_2_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_3_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_3">Place 3</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_3_slider">
+              <div id="place_3_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_4_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_4">Place 4</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_4_slider">
+              <div id="place_4_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_5_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_5">Place 5</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_5_slider">
+              <div id="place_5_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_6_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_6">Place 6</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_6_slider">
+              <div id="place_6_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_7_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_7">Place 7</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_7_slider">
+              <div id="place_7_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_8_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_8">Place 8</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_8_slider">
+              <div id="place_8_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_9_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_9">Place 9</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_9_slider">
+              <div id="place_9_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="place_10_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="place_10">Place 10</h4>
+            <div class="slidecontainer">
+              <input type="range" min="-1" max="1" value="0" class="slider" id="place_10_slider">
+              <div id="place_10_label">Have not been</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" id="city_rating_button">Get my Recommendations!</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Recommendations -->
+  <section class="page-section" id="final_recs" style="display:none">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Your Recommendations!</h2>
+          <h3 class="section-subheading text-muted">Click on the picture for more information <br />Please give feedback on your recommendations. Give a thumbs up if you are interested in visiting and a thumbs down if you are not interested</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#rec_1_modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="rec_1_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="rec_1" value=0>Rec 1</h4>
+            <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_1" style="padding: 10px; float: left;"/> 
+            <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_1" style="padding: 10px; float: right;"/>
+          </div>
+        </div>
+        
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#rec_2_modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="rec_2_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="rec_2" value=0>Rec 2</h4>
+            <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_2" style="padding: 10px; float: left;"/> 
+            <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_2" style="padding: 10px; float: right;"/>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#rec_3_modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="rec_3_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="rec_3" value=0>Rec 3</h4>
+            <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_3" style="padding: 10px; float: left;"/> 
+            <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_3" style="padding: 10px; float: right;"/>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#rec_4_modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="rec_4_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="rec_4" value=0>Rec 4</h4>
+            <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_4" style="padding: 10px; float: left;"/> 
+            <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_4" style="padding: 10px; float: right;"/>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href="#rec_5_modal">
+            <img class="img-fluid" src="images/historical.jpg" alt="" id="rec_5_img">
+          </a>
+          <div class="portfolio-caption">
+            <h4 id="rec_5" value=0>Rec 5</h4>
+            <input type="image" src="images/thumbs_down.png" width="50" height="50" id="thumbs_down_5" style="padding: 10px; float: left;"/> 
+            <input type="image" src="images/thumbs_up.png" width="50" height="50" id="thumbs_up_5" style="padding: 10px; float: right;"/>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" id="satisfaction_button">Thank you!</a>
+          <p id="thank_you_message"></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="bg-light page-section" id="team">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Contact Me</h2>
+          <h4>Kayli Leung</h4>
+          <p class="text-muted">Data Scientist</p>
+          <ul class="list-inline social-buttons">
+            <li class="list-inline-item">
+              <a href="https://github.com/kayschulz" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://medium.com/@kay.schulz10" target="_blank">                 
+                <i class="fab fa-medium"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.linkedin.com/in/kaylileung/" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Recommendation Modals -->
+
+  <!-- Modal 1 -->
+  <div class="portfolio-modal modal fade" id="rec_1_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+          <div class="lr">
+            <div class="rl"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <div class="modal-body">
+                <!-- Project Details Go Here -->
+                <h2 id="modal_1" class="text-uppercase">Project Name</h2>
+                <img class="img-fluid d-block mx-auto" src="img/portfolio/01-full.jpg" alt="" id="modal_1_img">
+                <p id="modal_1_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                <a id="more_1" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                  <i class="fas fa-times"></i>
+                  More Information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2 -->
+  <div class="portfolio-modal modal fade" id="rec_2_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+          <div class="lr">
+            <div class="rl"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <div class="modal-body">
+                <!-- Project Details Go Here -->
+                <h2 id="modal_2" class="text-uppercase">Project Name</h2>
+                <img class="img-fluid d-block mx-auto" src="img/portfolio/02-full.jpg" alt="" id="modal_2_img">
+                <p id=modal_2_summary>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                <a id="more_2" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                  <i class="fas fa-times"></i>
+                  More Information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3 -->
+  <div class="portfolio-modal modal fade" id="rec_3_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+          <div class="lr">
+            <div class="rl"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <div class="modal-body">
+                <!-- Project Details Go Here -->
+                <h2 id="modal_3" class="text-uppercase">Project Name</h2>
+                <img class="img-fluid d-block mx-auto" src="img/portfolio/03-full.jpg" alt="" id="modal_3_img">
+                <p id="modal_3_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                <a id="more_3" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                  <i class="fas fa-times"></i>
+                  More Information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4 -->
+  <div class="portfolio-modal modal fade" id="rec_4_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+          <div class="lr">
+            <div class="rl"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <div class="modal-body">
+                <!-- Project Details Go Here -->
+                <h2 id="modal_4" class="text-uppercase">Project Name</h2>
+                <img class="img-fluid d-block mx-auto" src="img/portfolio/04-full.jpg" alt="" id="modal_4_img">
+                <p id="modal_4_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                <a id="more_4" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                  <i class="fas fa-times"></i>
+                  More Information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5 -->
+  <div class="portfolio-modal modal fade" id="rec_5_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+          <div class="lr">
+            <div class="rl"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <div class="modal-body">
+                <!-- Project Details Go Here -->
+                <h2 id="modal_5" class="text-uppercase">Project Name</h2>
+                <img class="img-fluid d-block mx-auto" src="img/portfolio/05-full.jpg" alt="" id="modal_5_img">
+                <p id="modal_5_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                <a id="more_5" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                 <i class="fas fa-times"></i>
+                  More Information</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.js"></script>
+
+  <!-- Contact form JavaScript -->
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/agency.js"></script>
+
+</body>
+
+</html>
