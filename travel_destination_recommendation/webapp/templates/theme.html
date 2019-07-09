@@ -318,7 +318,7 @@
 
     def get_sats(response):
       if response.status==200 or response.status==0:
-        pass   
+        document["thank_you_message"].textContent = "Thank you for your feedback"   
       else:
         warnings.warn(response.text)
         
@@ -443,7 +443,7 @@
       <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase">Previous Experience</h2>
-          <h3 class="section-subheading text-muted">Move the slider right if you have been to the given location and you LIKED it. Move it to the left if you have been to the given location and disliked it. Leave the slider in the middle if you haven't been to the location</h3>
+          <h3 class="section-subheading text-muted">Move the slider right if you have been to the given location and you LIKED it. Move it to the left if you have been to the given location and DISLIKED it. Leave the slider in the middle if you haven't been to the location</h3>
         </div>
       </div>
 
@@ -592,7 +592,7 @@
       <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase">Your Recommendations!</h2>
-          <h3 class="section-subheading text-muted">Let me know how well my recommendations are. Give a thumbs up if you are interested in visiting and a thumbs down if you are not interested</h3>
+          <h3 class="section-subheading text-muted">Click on the picture for more information <br />Please give feedback on your recommendations. Give a thumbs up if you are interested in visiting and a thumbs down if you are not interested</h3>
         </div>
       </div>
 
@@ -654,6 +654,7 @@
 
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" id="satisfaction_button">Thank you!</a>
+          <p id="thank_you_message"></p>
         </div>
 
       </div>

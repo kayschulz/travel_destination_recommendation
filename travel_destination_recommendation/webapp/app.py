@@ -168,7 +168,5 @@ def get_city_summary(cities_df=cities):
         if city == 'Oban':
             city = 'Oban, Mull & Iona'
         summary = cities_df.loc[cities_df['city'] == city, 'city_summary'].item()
-        print(summary)
         city_and_summary[ind] = summary
-    print(city_and_summary)
     return jsonify(city_and_summary)
