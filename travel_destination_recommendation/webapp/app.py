@@ -78,19 +78,26 @@ def update_user_scores(user_score, random_recs, user_ratings, cities):
     """
     user_score = user_score.tolist()
     for ind, city in enumerate(random_recs):
+        city = city.replace("(", '').replace(")", '').replace("'", "")
+        city = city.split(",")[0]
+        if city == 'Oban':
+            city = 'Oban, Mull & Iona'
         rating = user_ratings[ind]
-        if rating != 0:
+        if rating == 1:
             city_score = get_city_scores(cities, city)
-            if rating == -1:
-                for i, score in enumerate(city_score):
-                    score = -1 * score
-                    city_score[i] = score
+            user_score.extend(city_score)
+        elif rating == -1:
+            print(city)
+            print(type(city))
+            city_score = get_city_scores(cities_df=cities, city=city)
+            for i, score in enumerate(city_score[0]):        
+                score = -1 * score                    
+                city_score[0][i] = score
             user_score.extend(city_score)
 
     new_score = []
     for i in range(5):
         new_score.append(np.mean([item[i] for item in user_score]))
-
     return np.array(new_score).reshape(1, -1)
 
 
@@ -140,6 +147,7 @@ def recommend():
             visited.append(random_recs[ind])
  
     updated_scores = update_user_scores(user_score, random_recs_string, user_ratings, cities)
+    print(updated_scores)
     updated_recs = update_recommendations(nn_model, cities, updated_scores, visited)
     
     # to jsonify-able format

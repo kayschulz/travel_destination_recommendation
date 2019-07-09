@@ -57,10 +57,13 @@ def get_city_scores(cities_df, city):
     """
     Retrieve the topic scores for a specific city.
     """
+    print(city)
+    print(type(city))
     topics = ['forest_mountain', 'palaces',
               'island_water', 'historical_ww2', 'urban']
     city_score = cities_df.loc[cities_df['city'] == city,
                                topics].values.tolist()
+    print(city_score)
     return city_score
 
 
