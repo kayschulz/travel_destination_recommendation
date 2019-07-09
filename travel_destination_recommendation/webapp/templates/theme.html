@@ -239,6 +239,32 @@
         document[f"rec_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
         document[f"modal_{int(k)+1}"].textContent = city_country
         document[f"modal_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
+      get_recommendation_summaries()
+    
+    def update_summary(response):
+      if response.status==200 or response.status==0:
+        print("in update_sum")
+        summaries = json.loads(response.text)
+        for k, summary in summaries.items():
+          document[f"modal_{int(k)+1}_summary"].textContent = summary
+
+      else:
+        warnings.warn(response.text)
+    def get_recommendation_summaries():
+      print("in get_rec_sum")
+      req = ajax.ajax()
+      req.bind('complete', update_summary)
+      req.open('POST', '/update_modal', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+          'city_1': document['rec_1'].textContent,
+          'city_2': document['rec_2'].textContent,
+          'city_3': document['rec_3'].textContent,
+          'city_4': document['rec_4'].textContent,
+          'city_5': document['rec_5'].textContent
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
     
     def show_recommendations(ev):
       document["final_recs"].style.display = "inline"
@@ -313,6 +339,7 @@
       req.send(data)
     
     document["satisfaction_button"].bind("click", get_satisfaction)
+
 
   </script>
   <!-- Header -->

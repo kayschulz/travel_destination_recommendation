@@ -158,11 +158,17 @@ def rate_recs():
     user_satisfaction.insert_one(satisfaction_score)
     return ''
 
-@app.route('/update_modal_summary', methods=['GET', 'POST'])
-def get_city_summary(cities=cities):
+@app.route('/update_modal', methods=['GET', 'POST'])
+def get_city_summary(cities_df=cities):
     data = request.json
-    print(data)
-    print("i have data")
-    city = data[0]
-    summary = cities.loc["city" == city, "summary"]
-    return summary
+    city_country_list = list(data.values())
+    city_list = [city.split(",")[0] for city in city_country_list]
+    city_and_summary = {}
+    for ind, city in enumerate(city_list):
+        if city == 'Oban':
+            city = 'Oban, Mull & Iona'
+        summary = cities_df.loc[cities_df['city'] == city, 'city_summary'].item()
+        print(summary)
+        city_and_summary[ind] = summary
+    print(city_and_summary)
+    return jsonify(city_and_summary)
