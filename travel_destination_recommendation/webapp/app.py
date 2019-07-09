@@ -135,7 +135,6 @@ def recommend():
     
     # create a visited cities list
     visited = []
-    print(visited)
     for ind, rating in enumerate(user_ratings):
         if rating != 0:
             visited.append(random_recs[ind])
@@ -158,3 +157,12 @@ def rate_recs():
     satisfaction_score = {'satisfaction_score': sum(satisfaction) / 5}
     user_satisfaction.insert_one(satisfaction_score)
     return ''
+
+@app.route('/update_modal_summary', methods=['GET', 'POST'])
+def get_city_summary(cities=cities):
+    data = request.json
+    print(data)
+    print("i have data")
+    city = data[0]
+    summary = cities.loc["city" == city, "summary"]
+    return summary
