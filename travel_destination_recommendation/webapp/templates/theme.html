@@ -240,21 +240,41 @@
         document[f"modal_{int(k)+1}"].textContent = city_country
         document[f"modal_{int(k)+1}_img"].attrs["src"] = f"images/{city}.jpg"
       get_recommendation_summaries()
+      get_recommendation_links()
     
     def update_summary(response):
       if response.status==200 or response.status==0:
-        print("in update_sum")
         summaries = json.loads(response.text)
         for k, summary in summaries.items():
           document[f"modal_{int(k)+1}_summary"].textContent = summary
-
       else:
         warnings.warn(response.text)
     def get_recommendation_summaries():
-      print("in get_rec_sum")
       req = ajax.ajax()
       req.bind('complete', update_summary)
       req.open('POST', '/update_modal', True)
+      req.set_header('content-type','application/json')
+      user_inputs = {
+          'city_1': document['rec_1'].textContent,
+          'city_2': document['rec_2'].textContent,
+          'city_3': document['rec_3'].textContent,
+          'city_4': document['rec_4'].textContent,
+          'city_5': document['rec_5'].textContent
+      }
+      data = json.dumps(user_inputs)
+      req.send(data)
+
+    def update_url(response):
+      if response.status==200 or response.status==0:
+        urls = json.loads(response.text)
+        for k, url in urls.items():
+          document[f"more_{int(k)+1}"].attrs['href'] = url
+      else:
+        warnings.warn(response.text)
+    def get_recommendation_links():
+      req = ajax.ajax()
+      req.bind('complete', update_url)
+      req.open('POST', '/update_modal_url', True)
       req.set_header('content-type','application/json')
       user_inputs = {
           'city_1': document['rec_1'].textContent,
@@ -846,9 +866,9 @@
                 <h2 id="modal_1" class="text-uppercase">Project Name</h2>
                 <img class="img-fluid d-block mx-auto" src="img/portfolio/01-full.jpg" alt="" id="modal_1_img">
                 <p id="modal_1_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                <button class="btn btn-primary" type="button" onclick="window.open('http://google.com','_blank')">
+                <a id="more_1" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
                   <i class="fas fa-times"></i>
-                  More Information</button>
+                  More Information</a>
               </div>
             </div>
           </div>
@@ -874,9 +894,9 @@
                 <h2 id="modal_2" class="text-uppercase">Project Name</h2>
                 <img class="img-fluid d-block mx-auto" src="img/portfolio/02-full.jpg" alt="" id="modal_2_img">
                 <p id=modal_2_summary>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                <button class="btn btn-primary" data-dismiss="modal" type="button">
+                <a id="more_2" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
                   <i class="fas fa-times"></i>
-                  More Information</button>
+                  More Information</a>
               </div>
             </div>
           </div>
@@ -902,9 +922,9 @@
                 <h2 id="modal_3" class="text-uppercase">Project Name</h2>
                 <img class="img-fluid d-block mx-auto" src="img/portfolio/03-full.jpg" alt="" id="modal_3_img">
                 <p id="modal_3_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                <button class="btn btn-primary" data-dismiss="modal" type="button">
+                <a id="more_3" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
                   <i class="fas fa-times"></i>
-                  More Information</button>
+                  More Information</a>
               </div>
             </div>
           </div>
@@ -930,9 +950,9 @@
                 <h2 id="modal_4" class="text-uppercase">Project Name</h2>
                 <img class="img-fluid d-block mx-auto" src="img/portfolio/04-full.jpg" alt="" id="modal_4_img">
                 <p id="modal_4_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                <button class="btn btn-primary" data-dismiss="modal" type="button">
+                <a id="more_4" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
                   <i class="fas fa-times"></i>
-                  More Information</button>
+                  More Information</a>
               </div>
             </div>
           </div>
@@ -958,9 +978,9 @@
                 <h2 id="modal_5" class="text-uppercase">Project Name</h2>
                 <img class="img-fluid d-block mx-auto" src="img/portfolio/05-full.jpg" alt="" id="modal_5_img">
                 <p id="modal_5_summary">Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                <button class="btn btn-primary" data-dismiss="modal" type="button">
-                  <i class="fas fa-times"></i>
-                  More Information</button>
+                <a id="more_5" class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href='http://google.com' target="_blank">
+                 <i class="fas fa-times"></i>
+                  More Information</a>
               </div>
             </div>
           </div>

@@ -170,3 +170,16 @@ def get_city_summary(cities_df=cities):
         summary = cities_df.loc[cities_df['city'] == city, 'city_summary'].item()
         city_and_summary[ind] = summary
     return jsonify(city_and_summary)
+
+@app.route('/update_modal_url', methods=['GET', 'POST'])
+def get_urls(cities_df=cities):
+    data = request.json
+    city_country_list = list(data.values())
+    city_list = [city.split(",")[0] for city in city_country_list]
+    city_and_url = {}
+    for ind, city in enumerate(city_list):
+        if city == 'Oban':
+            city = 'Oban, Mull & Iona'
+        url = cities_df.loc[cities_df['city'] == city, 'city_url'].item()
+        city_and_url[ind] = url
+    return jsonify(city_and_url)
