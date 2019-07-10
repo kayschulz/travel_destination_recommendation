@@ -39,7 +39,7 @@ def score():
     Returns a dictionary of 10 random cities from the 50 closest cities
     """
     data = request.json
-    user_scores = store_data(data)
+    user_scores = store_scores(data)
 
     # store user_score variable
     session['user_scores'] = user_scores
@@ -57,7 +57,7 @@ def score():
     return jsonify(random_cities_dict)
 
 
-def store_data(data):
+def store_scores(data):
     """
     Convert json data values to an array of floats
     """
@@ -82,15 +82,12 @@ def update_user_scores(user_score, random_recs, user_ratings, cities):
     for ind, city in enumerate(random_recs):
         city = city.replace("(", '').replace(")", '').replace("'", "")
         city = city.split(",")[0]
-        if city == 'Oban':
-            city = 'Oban, Mull & Iona'
+        city = replace_oban(city)
         rating = user_ratings[ind]
         if rating == 1:
             city_score = get_city_scores(cities, city)
             user_score.extend(city_score)
         elif rating == -1:
-            print(city)
-            print(type(city))
             city_score = get_city_scores(cities_df=cities, city=city)
             for i, score in enumerate(city_score[0]):
                 score = -1 * score
@@ -135,7 +132,7 @@ def recommend():
     user_score = session.get('user_scores')
     random_recs = session.get('random_cities')
 
-    # convert cities to strings
+    # convert cities to strings or tuple for other functions
     random_recs = [rec for rec in random_recs]
     random_recs_string = [str(rec) for rec in random_recs]
 
@@ -151,7 +148,6 @@ def recommend():
 
     updated_scores = update_user_scores(user_score, random_recs_string,
                                         user_ratings, cities)
-    print(updated_scores)
     updated_recs = update_recommendations(nn_model, cities,
                                           updated_scores, visited)
 
@@ -179,8 +175,7 @@ def get_city_summary(cities_df=cities):
     city_list = [city.split(",")[0] for city in city_country_list]
     city_and_summary = {}
     for ind, city in enumerate(city_list):
-        if city == 'Oban':
-            city = 'Oban, Mull & Iona'
+        city = replace_oban(city)
         summary = cities_df.loc[cities_df['city'] == city,
                                 'city_summary'].item()
         city_and_summary[ind] = summary
@@ -194,8 +189,14 @@ def get_urls(cities_df=cities):
     city_list = [city.split(",")[0] for city in city_country_list]
     city_and_url = {}
     for ind, city in enumerate(city_list):
-        if city == 'Oban':
-            city = 'Oban, Mull & Iona'
+        city = replace_oban(city)
         url = cities_df.loc[cities_df['city'] == city, 'city_url'].item()
         city_and_url[ind] = url
     return jsonify(city_and_url)
+
+
+def replace_oban(city):
+    """Corrects the city name if the city is Oban"""
+    if city == 'Oban':
+        city = 'Oban, Mull & Iona'
+    return city
