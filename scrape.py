@@ -27,8 +27,11 @@ def collect_all_data(browser, country_url,
     browser.get(country_url)
     country = collect_country_name(browser)
     country_summary = collect_country_summary(browser)
+    
+    # to mongodb collection
     country_dict = {'country': country, 'country_summary': country_summary}
     country_collection.insert_one(country_dict)
+    
     time.sleep(np.random.randint(10, 60))
     print(f'Inserted {country} into country collection')
     city_path = '/europe/' + country.lower() + '/'

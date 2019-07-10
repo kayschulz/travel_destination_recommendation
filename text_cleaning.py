@@ -712,7 +712,7 @@ def get_aggregate_score(lda_model, bow_corpus, i=0):
     """
     Get the combined aggregate score for topics using rick_steves and wikipedia
     """
-    # scores for each summary
+    # scores for each summary. There are 213 cities.
     rick_steves = lda_model[bow_corpus[i]]
     wikipedia = lda_model[bow_corpus[i+213]]
 
