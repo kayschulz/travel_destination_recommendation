@@ -1,1 +1,1 @@
-Contains mongodb connection string in file called `password.txt`
+Contains MongoDB connection string in file called `password.txt`
