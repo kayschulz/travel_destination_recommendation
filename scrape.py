@@ -43,7 +43,7 @@ def collect_all_data(browser, country_url,
 
 
 def collect_country_name(browser):
-    """Collects the country name from ricksteves.com""""
+    """Collects the country name from ricksteves.com"""
     country_path = '//*[@id="body"]/div[2]/div[1]/div/h1'
     country = browser.find_element_by_xpath(country_path).text
     return country
