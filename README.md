@@ -1,4 +1,5 @@
 # European Travel Recommendation
+[Overview Presentation](presentation.pdf)
 
 ## Business Understanding
 I often find that I have the time, means, and desire to go on vacation, but unless I have family obligations, I have no clue where I should visit. Additionally, I have found that most travel websites can give you specific information about a city of interest, but only if you know where you want to go and that is the problem.
@@ -48,7 +49,7 @@ Preliminary results show that users are interested in about 67% of their recomme
 [Evaluation Notebook](evaluate_results.ipynb)
 
 ## Deployment
-The model is deployed on the website [triprecommender.online](www.triprecommender.online). 
+The model is deployed as a Flask app on the website [triprecommender.online](www.triprecommender.online). 
 
 When the user gets to the website they will be asked to use a slider bar to rate the 5 settings determined from topic modeling on a scale of 0 to 10. When the user selects `Next`, they will scroll down to a new section asks users to rate previous experience. 
 
