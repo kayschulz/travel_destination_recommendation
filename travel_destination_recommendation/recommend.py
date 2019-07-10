@@ -37,6 +37,7 @@ def recommend_nn(nn_model, cities, user_scores):
     during the instantiation of the nn_model.
     """
     distances, closest = nn_model.kneighbors(user_scores)
+    # distances and closest are both a list of a list [[#,#,...]]
 
     destinations = []
     for index in closest[0]:
@@ -47,10 +48,10 @@ def recommend_nn(nn_model, cities, user_scores):
     return list(zip(destinations, distances))
 
 
-def get_random_recs(closest, n=10):
-    """Generates n random recommendations from
+def get_random_recs(closest):
+    """Generates 10 random recommendations from
        top 50 recommended destinations"""
-    return np.random.choice(np.array(closest)[:, 0], n, replace=False)
+    return np.random.choice(np.array(closest)[:, 0], 10, replace=False)
 
 
 def get_city_scores(cities_df, city):
@@ -72,6 +73,7 @@ def update_user_score(user_score, cities, random_recs, city_rating):
     the average calculation.
     """
     user_score = user_score.tolist()
+    # city takes form ('city', 'country')
     for ind, city in enumerate(random_recs):
         rating = int(city_rating[ind])
         if rating != 0:
@@ -82,6 +84,7 @@ def update_user_score(user_score, cities, random_recs, city_rating):
                     city_score[0][i] = score
             user_score.extend(city_score)
 
+    # generate new score
     new_score = []
     for i in range(5):
         new_score.append(np.mean([item[i] for item in user_score]))
@@ -99,13 +102,15 @@ def get_updated_n_recommendation(user_score, cities, random_recs,
     updated_recs = recommend_nn(nn_model, cities, user_score)
 
     updated_city_recs = [rec[0] for rec in updated_recs]
-
+    
+    # find indices of visited cities
     indices_to_remove = []
     for updated_city in updated_city_recs:
         if updated_city in visited_cities:
             index = updated_city_recs.index(updated_city)
             indices_to_remove.append(index)
 
+    # remove visited cities
     for index in sorted(indices_to_remove, reverse=True):
         del updated_recs[index]
 
