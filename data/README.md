@@ -1,3 +1,4 @@
+# Data
 This folder contains text data about 213 cities/regions in Europe. 
 
 * cities.pkl contains city/region summaries from ricksteves.com
