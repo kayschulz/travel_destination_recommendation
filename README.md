@@ -7,12 +7,12 @@ I often find that I have the time, means, and desire to go on vacation, but unle
 I have created a web application that first measures user interest in five settings that often appear in European cities/regions. I then ask the user for information about previous travel experience in Europe by asking them to rate 10 random European locations. This second step does two things:
 
 * removes that location from potential recommendations
-* updates the users initial setting ratings to be more or less similar to visited cities (based on good or bad experience)
+* updates the user's initial setting ratings to be more or less similar to visited cities (based on good or bad experience)
 
 The application then gives the user five recommended cities. Each city's picture also links to the appropriate [Rick Steves](ricksteves.com) entry on the destination.
 
 ## Data Understanding
-Selenium was used to scrape text summaries from [ricksteves.com](ricksteves.com) as well as [Wikipedia](wikipedia.com). These text summaries along with `City`, `Country` names and URLs in a MongoDB Atlas database.
+Selenium was used to scrape text summaries from [ricksteves.com](ricksteves.com) as well as [Wikipedia](wikipedia.com). These text summaries along with `City`, `Country` names and URLs are stored in a MongoDB Atlas database.
 
 I additionally scraped photos from Rick Steves for use on the website. 
 
@@ -20,7 +20,7 @@ Note: the XPath I used for images has changed since I completed scraping for the
 [Scraping Notebook](collect_data.ipynb)
 
 ## Data Preparation
-I used NLTK and gensim to tokenize, lemmatize, and stem all city text summaries. I used these text summaries to perform LDA topic modeling and my initial topics were accurate topics, but they were topics such as "French", "European", or "King Henry" which are not helpful for the business problem. I added to the gensim's default list of stopword all countries and cities as well as names I saw in the topic modeling.
+I used NLTK and gensim to tokenize, lemmatize, and stem all city text summaries. I used these text summaries to perform LDA topic modeling and my initial topics were accurate topics, but they were topics such as "French", "European", or "King Henry" which are not helpful for the business problem. I added to the gensim's default list of stopword all names (country, city, or person) I saw in the topic modeling.
 
 From LDA modeling I discovered 5 clear topics:
 * Forest/Mountain
@@ -64,6 +64,6 @@ To run the flask app locally, clone this repository and enter into the terminal:
 ## Future Exploration
 Part of collecting information about the ten random cities is to collect enough information for a true ALS recommender model that I could build in the future.
 
-I would love to collect more summaries about each destination so that more topics could be generated in the LDA model. As it currently stands, I have two sets of summaries for 213 destinations, which is not a very large sample. With more data, I would hope to better fit each city into the topics. 
+I want to collect more summaries about each destination so that more topics could be generated in the LDA model. As it currently stands, I have two sets of summaries for 213 destinations, which is not a very large sample. With more data, I would hope to better fit each city into the topics. 
 
-I would also love to expand this project beyond just European travel. 
+I want to expand this project beyond just European travel. 
