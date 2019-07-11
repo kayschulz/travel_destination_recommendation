@@ -11,6 +11,8 @@ I have created a web application that first measures user interest in five setti
 
 The application then gives the user five recommended cities. Each city's picture also links to the appropriate [Rick Steves](ricksteves.com) entry on the destination.
 
+The recommender system is evaluated by how many of the recommendations the user is interested in.
+
 ## Data Understanding
 Selenium was used to scrape text summaries from [ricksteves.com](ricksteves.com) as well as [Wikipedia](wikipedia.com). These text summaries along with `City`, `Country` names and URLs are stored in a MongoDB Atlas database.
 
