@@ -51,7 +51,7 @@ Preliminary results show that users are interested in about 67% of their recomme
 [Evaluation Notebook](evaluate_results.ipynb)
 
 ## Deployment
-The model is deployed as a Flask app on the website [triprecommender.online](www.triprecommender.online). 
+The model is deployed as a Flask app on the website [triprecommender.online](http://www.triprecommender.online). 
 
 When the user gets to the website they will be asked to use a slider bar to rate the 5 settings determined from topic modeling on a scale of 0 to 10. When the user selects `Next`, they will scroll down to a new section asks users to rate previous experience. 
 
